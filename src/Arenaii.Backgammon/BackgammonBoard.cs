@@ -41,10 +41,10 @@ namespace Arenaii.Backgammon
 		public int ScoreO { get { return 15 - fields.Where(field => !field.OwnedByX).Sum(field => field.Stones); } }
 
 		public bool NotFinished { get; private set; }
-		public bool XToMove { get; private set; }
+		public bool XToMove { get; internal set; }
 		public bool XIsWinner { get; private set; }
 
-		public int Turn { get; private set; }
+		public int Turn { get; internal set; }
 
 		/// <summary>Renders the board to the console.</summary>
 		/// <remarks>
@@ -139,10 +139,8 @@ namespace Arenaii.Backgammon
 			Console.Write("   ");
 		}
 
-		public bool Apply(string move, int dice0, int dice1, bool xToMove)
+		public bool Apply(string move, int dice0, int dice1)
 		{
-			XToMove = xToMove;
-
 			// No move provided.
 			if (string.IsNullOrEmpty(move)){ return false; }
 			
@@ -161,11 +159,11 @@ namespace Arenaii.Backgammon
 			foreach(var m in moves)
 			{
 				this[m.Source].Stones--;
-				if (this[m.Target].OwnedByX != xToMove)
+				if (this[m.Target].OwnedByX != XToMove)
 				{
 					this[m.Target].Stones = 0;
-					(xToMove ? BarO : BarX).Stones++;
-					this[m.Target].OwnedByX = xToMove;
+					(XToMove ? BarO : BarX).Stones++;
+					this[m.Target].OwnedByX = XToMove;
 				}
 				// Bear-off
 				else if (m.Target == BarXIndex || m.Target == BarOIndex) { /* No adding. */ }
@@ -173,7 +171,7 @@ namespace Arenaii.Backgammon
 				else
 				{
 					this[m.Target].Stones++;
-					this[m.Target].OwnedByX = xToMove;
+					this[m.Target].OwnedByX = XToMove;
 				}
 			}
 			return true;

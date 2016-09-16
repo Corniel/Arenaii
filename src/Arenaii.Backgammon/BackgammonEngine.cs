@@ -47,9 +47,12 @@ namespace Arenaii.Backgammon
 					}
 
 					var xToMove = true;
-
+					var turn = 0;
 					while (board.NotFinished)
 					{
+						if (xToMove) { turn++; }
+						board.Turn = turn;
+						board.XToMove = xToMove;
 						var bot = xToMove ? bot1 : bot2;
 						var time = xToMove ? time1 : time2;
 						var start = bot.Elapsed;
@@ -65,7 +68,7 @@ namespace Arenaii.Backgammon
 						Console.WriteLine(@"{0:ss\:ff} {1:0000} {2}", bot1.Elapsed, bot1.Bot.Elo, bot1.Bot.FullName);
 						Console.WriteLine(@"{0:ss\:ff} {1:0000} {2}", bot2.Elapsed, bot2.Bot.Elo, bot2.Bot.FullName);
 						
-						if (bot.TimedOut || !board.Apply(move, dice0, dice1, xToMove))
+						if (bot.TimedOut || !board.Apply(move, dice0, dice1))
 						{
 							board.Loses(xToMove);
 						}
