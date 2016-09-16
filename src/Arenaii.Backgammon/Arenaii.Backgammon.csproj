@@ -60,6 +60,7 @@
     <Compile Include="BackgammonBoard.cs" />
     <Compile Include="BackgammonEngine.cs" />
     <Compile Include="BackgammonField.cs" />
+    <Compile Include="BackGammonMove.cs" />
     <Compile Include="Data\BackgammonCompetition.cs" />
     <Compile Include="Data\BackgammonSettings.cs" />
     <Compile Include="Program.cs" />

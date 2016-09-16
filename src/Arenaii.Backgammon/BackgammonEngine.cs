@@ -46,9 +46,10 @@ namespace Arenaii.Backgammon
 						dice1 = Rnd.Next(1, 7);
 					}
 
+					var xToMove = true;
+
 					while (board.NotFinished)
 					{
-						var xToMove = board.XToMove;
 						var bot = xToMove ? bot1 : bot2;
 						var time = xToMove ? time1 : time2;
 						var start = bot.Elapsed;
@@ -63,11 +64,8 @@ namespace Arenaii.Backgammon
 						board.ToConsole();
 						Console.WriteLine(@"{0:ss\:ff} {1:0000} {2}", bot1.Elapsed, bot1.Bot.Elo, bot1.Bot.FullName);
 						Console.WriteLine(@"{0:ss\:ff} {1:0000} {2}", bot2.Elapsed, bot2.Bot.Elo, bot2.Bot.FullName);
-
-						dice0 = Rnd.Next(1, 7);
-						dice1 = Rnd.Next(1, 7);
-
-						if (bot.TimedOut || !board.Apply(move))
+						
+						if (bot.TimedOut || !board.Apply(move, dice0, dice1, xToMove))
 						{
 							board.Loses(xToMove);
 						}
@@ -84,8 +82,11 @@ namespace Arenaii.Backgammon
 								time2 = tm;
 							}
 						}
+						dice0 = Rnd.Next(1, 7);
+						dice1 = Rnd.Next(1, 7);
+						xToMove = !xToMove;
 					}
-
+					
 					var score = board.XIsWinner ? 1 : 0;
 					return new Match(pairing.Bot1, pairing.Bot2, score)
 					{
