@@ -36,10 +36,6 @@
       <HintPath>..\packages\Thrower.2.0.1\lib\net45\PommaLabs.Thrower.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Qowaiv, Version=2.0.0.164, Culture=neutral, PublicKeyToken=0e6640b5f269a3fc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Qowaiv.2.0.0.164\lib\net45\Qowaiv.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -61,10 +57,13 @@
     <Compile Include="MetaBoard.cs" />
     <Compile Include="Score.cs" />
     <Compile Include="TinyBoard.cs" />
+    <Compile Include="BoardState.cs" />
     <Compile Include="UltimateTicTacToeEngine.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config.xample" />
+    <None Include="App.config.xample">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>

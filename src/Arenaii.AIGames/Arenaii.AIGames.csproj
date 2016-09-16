@@ -48,7 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AIGamesEngine.cs" />
-    <Compile Include="BoardState.cs" />
     <Compile Include="Data\AIGamesSettings.cs" />
     <Compile Include="Data\PlayerName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

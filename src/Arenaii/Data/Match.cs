@@ -1,5 +1,4 @@
-﻿using Qowaiv;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
@@ -18,9 +17,6 @@ namespace Arenaii.Data
 			Id2 = bot2.Id;
 			Score = score;
 		}
-		[XmlAttribute("id")]
-		public string Id { get; set; }
-
 		[XmlAttribute("id1")]
 		public string Id1 { get; set; }
 		[XmlAttribute("id2")]

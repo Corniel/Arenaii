@@ -12,7 +12,6 @@ namespace Arenaii.Data
 		}
 		public bool IsSymetric { get; set; }
 		public Elo AverageElo { get; set; }
-
 		public PairingType Pairing { get; set; }
 	}
 }
