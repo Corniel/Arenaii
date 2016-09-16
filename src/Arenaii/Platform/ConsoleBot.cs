@@ -39,6 +39,10 @@ namespace Arenaii.Platform
 			return task.Result;
 		}
 
+		public void Write(string format)
+		{
+			process.StandardInput.WriteLine(format);
+		}
 		public void Write(string format, params object[] args)
 		{
 			process.StandardInput.WriteLine(format, args);
