@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="AIGames\UltimateTicTacToe\UltimateTicTacToeCompetitionTest.cs" />
     <Compile Include="AIGames\UltimateTicTacToe\UltimateTicTacToeEngineTest.cs" />
+    <Compile Include="Backgammon\BackgammonBoardTest.cs" />
     <Compile Include="Data\BotTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -78,6 +79,10 @@
     <ProjectReference Include="..\Arenaii.AIGames\Arenaii.AIGames.csproj">
       <Project>{d28327d6-2d35-4147-b64c-e8bd1b97a9e8}</Project>
       <Name>Arenaii.AIGames</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Arenaii.Backgammon\Arenaii.Backgammon.csproj">
+      <Project>{578b2669-e064-424e-9171-79e78779420c}</Project>
+      <Name>Arenaii.Backgammon</Name>
     </ProjectReference>
     <ProjectReference Include="..\Arenaii\Arenaii.csproj">
       <Project>{2b3a8ede-4064-4bf2-aa11-0ce72432a5ac}</Project>
