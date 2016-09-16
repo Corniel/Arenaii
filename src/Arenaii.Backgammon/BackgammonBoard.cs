@@ -13,6 +13,7 @@ namespace Arenaii.Backgammon
 
 		public BackgammonBoard()
 		{
+			NotFinished = true;
 			fields = new BackgammonField[26];
 			for (var i = 0; i < 26; i++)
 			{

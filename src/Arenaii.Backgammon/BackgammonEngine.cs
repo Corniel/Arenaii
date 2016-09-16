@@ -4,11 +4,16 @@ using Arenaii.Platform;
 using System;
 using System.Text;
 using Troschuetz.Random;
+using Troschuetz.Random.Generators;
 
 namespace Arenaii.Backgammon
 {
 	public class BackgammonEngine : IEngine<BackgammonCompetition, BackgammonSettings>
 	{
+		public BackgammonEngine()
+		{
+			Rnd = new MT19937Generator();
+		}
 		public IGenerator Rnd { get; set; }
 
 		public Match Simulate(Pairing pairing, BackgammonCompetition competition)
@@ -28,8 +33,8 @@ namespace Arenaii.Backgammon
 					bot1.Write(gen.ToString());
 					bot2.Write(gen.ToString());
 
-					bot1.Write("settings bod-id 1");
-					bot2.Write("settings bot-id 2");
+					bot1.Write("settings bod_id 1");
+					bot2.Write("settings bot_id 2");
 
 					var board = new BackgammonBoard();
 
@@ -58,7 +63,7 @@ namespace Arenaii.Backgammon
 						var start = bot.Elapsed;
 
 						bot.Write(board.GetGameUpdate());
-						bot.Write("action move {0},{1} {3:0}", dice0, dice1, time.TotalMilliseconds);
+						bot.Write("action move {0},{1} {2:0}", dice0, dice1, time.TotalMilliseconds);
 						bot.Start();
 						var move = bot.Read(time);
 						bot.Stop();
