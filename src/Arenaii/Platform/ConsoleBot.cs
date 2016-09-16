@@ -1,4 +1,5 @@
-﻿using Arenaii.Data;
+﻿using Arenaii.Configuration;
+using Arenaii.Data;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -9,9 +10,25 @@ namespace Arenaii.Platform
 {
 	public class ConsoleBot : IDisposable
 	{
+		public ConsoleBot(Bot bot)
+		{
+			Bot = bot;
+			if(AppConfig.LogDirectory != null)
+			{
+				var name = string.Format("{0:yyyy-MM-dd HH_mm_ss_fff}.log", DateTime.Now);
+				var file = new FileInfo(Path.Combine(AppConfig.LogDirectory.FullName, bot.FullName, name));
+				if(!file.Directory.Exists)
+				{
+					file.Directory.Create();
+				}
+				Writer = new StreamWriter(file.FullName, false);
+			}
+		}
 		public Bot Bot { get; protected set; }
 
 		private readonly Stopwatch Timer = new Stopwatch();
+
+		private readonly StreamWriter Writer;
 
 		/// <summary>Start the timer for the bot.</summary>
 		public void Start() { Timer.Start(); }
@@ -36,16 +53,36 @@ namespace Arenaii.Platform
 				return string.Empty;
 			}
 			Stop();
+			Log("Resonse: {0}", task.Result);
 			return task.Result;
 		}
 
-		public void Write(string format)
+		public void Write(string message)
 		{
-			process.StandardInput.WriteLine(format);
+			process.StandardInput.WriteLine(message);
+			Log(message);
 		}
 		public void Write(string format, params object[] args)
 		{
 			process.StandardInput.WriteLine(format, args);
+			Log(format, args);
+		}
+
+		private void Log(string message)
+		{
+			if(Writer != null)
+			{
+				Writer.WriteLine(message);
+				Writer.Flush();
+			}
+		}
+		private void Log(string format, params object[] args)
+		{
+			if (Writer != null)
+			{
+				Writer.WriteLine(format, args);
+				Writer.Flush();
+			}
 		}
 
 		/// <summary>The process required to run the bot.</summary>
@@ -66,9 +103,8 @@ namespace Arenaii.Platform
 
 		public static ConsoleBot Create(Bot bot)
 		{
-			var console = new ConsoleBot()
+			var console = new ConsoleBot(bot)
 			{
-				Bot = bot,
 				process = CreateProcess(bot.Location),
 			};
 			return console;
@@ -92,6 +128,10 @@ namespace Arenaii.Platform
 				{
 					process.Dispose();
 				}
+				if(disposing && Writer != null)
+				{
+					Writer.Dispose();
+				}
 				m_IsDisposed = true;
 			}
 		}
@@ -99,7 +139,7 @@ namespace Arenaii.Platform
 		/// <summary>Destructor</summary>
 		~ConsoleBot() { Dispose(false); }
 
-		private bool m_IsDisposed = false;
+		private bool m_IsDisposed;
 
 		#endregion
 	}

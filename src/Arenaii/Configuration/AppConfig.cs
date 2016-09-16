@@ -20,6 +20,21 @@ namespace Arenaii.Configuration
 			}
 		}
 
+		public static DirectoryInfo LogDirectory
+		{
+			get
+			{
+				try
+				{
+					return new DirectoryInfo(ConfigurationManager.AppSettings["Log.Dir"]);
+				}
+				catch
+				{
+					return null;
+				}
+			}
+		}
+
 		public static DirectoryInfo BotsDirectory { get { return new DirectoryInfo(Path.Combine(CompetitionDirectory.FullName, "bots")); } }
 
 		public static DirectoryInfo GamesDirectory { get { return new DirectoryInfo(Path.Combine(CompetitionDirectory.FullName, "games")); } }

@@ -2,5 +2,6 @@
 <configuration>
   <appSettings>
     <add key="Competition.Dir" value="~\Arenaii\competitions\Backgammon"/>
+    <add key="Log.Dir" value="~\Arenaii\competitions\Backgammon\log"/>
   </appSettings>
 </configuration>

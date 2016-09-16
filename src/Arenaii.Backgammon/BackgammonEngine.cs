@@ -28,7 +28,7 @@ namespace Arenaii.Backgammon
 					var gen = new StringBuilder()
 						.AppendFormat("settings timebank {0}", settings.TimeBank).AppendLine()
 						.AppendFormat("settings time_per_move {0}", settings.TimePerMove).AppendLine()
-						.AppendFormat("settings seed {0}", Rnd.Next()).AppendLine();
+						.AppendFormat("settings seed {0}", Rnd.Next());
 
 					bot1.Write(gen.ToString());
 					bot2.Write(gen.ToString());

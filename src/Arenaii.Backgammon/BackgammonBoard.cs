@@ -208,7 +208,7 @@ namespace Arenaii.Backgammon
 			var sb = new StringBuilder();
 
 			sb.AppendFormat("update game board {0}", ToString()).AppendLine();
-			sb.AppendFormat("update game turn {0}", Turn).AppendLine();
+			sb.AppendFormat("update game turn {0}", Turn);
 			return sb.ToString();
 		}
 
