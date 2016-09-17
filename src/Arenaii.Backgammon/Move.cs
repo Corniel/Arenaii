@@ -1,32 +1,44 @@
-﻿namespace Arenaii.Backgammon
+﻿using System;
+
+namespace Arenaii.Backgammon
 {
-	public struct BackGammonMove
+	public struct Move
 	{
-		public static readonly BackGammonMove NoPlay;
+		public static readonly Move NoPlay;
 
 		private readonly byte src;
 		private readonly byte tar;
 		private readonly bool cap;
 
-		public BackGammonMove(int source, int target) : this(source, target, false) { }
-		public BackGammonMove(int source, int target, bool isCapture)
+		public Move(int source, int target) : this(source, target, false) { }
+		public Move(int source, int target, bool isCapture)
 		{
-			src = Guard(source);
-			tar = Guard(target);
+			src = (byte)source;
+			tar = (byte)target;
 			cap = isCapture;
-		}
-		private static byte Guard(int value)
-		{
-			if (value < BackgammonBoard.BarXIndex) { return BackgammonBoard.BarXIndex; }
-			if (value > BackgammonBoard.BarOIndex) { return BackgammonBoard.BarOIndex; }
-			return (byte)value;
 		}
 
 		public int Source { get { return src; } }
 		public int Target { get { return tar; } }
 		public bool IsCapture { get { return cap; } }
 
+		public int Movement { get { return Math.Abs(Target - Source); } }
+
 		public bool IsL2R { get { return Target > Source; } }
+
+		public bool IsValid(int dice, bool xToMove)
+		{
+			if (IsL2R != xToMove) { return false; }
+
+			if (Movement == dice) { return true; }
+
+			// Bear-off?
+			if(Movement < dice)
+			{
+				return (xToMove ? Board.BarOIndex : Board.BarXIndex) == Target;
+			}
+			return false;
+		}
 
 		public override string ToString()
 		{
@@ -47,7 +59,7 @@
 			return hash;
 		}
 
-		public static BackGammonMove Parse(string str, bool xToMove)
+		public static Move Parse(string str, bool xToMove)
 		{
 			if (string.IsNullOrEmpty(str) || !str.Contains("/")) { return NoPlay; }
 
@@ -62,7 +74,7 @@
 			}
 			if (s.StartsWith("BAR/"))
 			{
-				source = xToMove ? BackgammonBoard.BarXIndex : BackgammonBoard.BarOIndex;
+				source = xToMove ? Board.BarXIndex : Board.BarOIndex;
 			}
 			else if (!int.TryParse(s.Substring(0, s.IndexOf('/')), out source))
 			{
@@ -71,13 +83,21 @@
 
 			if (s.EndsWith("/OFF"))
 			{
-				source = xToMove ? BackgammonBoard.BarOIndex : BackgammonBoard.BarXIndex;
+				target = xToMove ? Board.BarOIndex : Board.BarXIndex;
 			}
 			else if (!int.TryParse(s.Substring(s.IndexOf('/') + 1), out target))
 			{
 				return NoPlay;
 			}
-			return new BackGammonMove(source, target, capture);
+
+			// source or target is outside the board.
+			if (source < Board.BarXIndex || source > Board.BarOIndex ||
+				target < Board.BarXIndex || target > Board.BarOIndex)
+			{
+				return NoPlay;
+			}
+
+			return new Move(source, target, capture);
 		}
 	}
 }

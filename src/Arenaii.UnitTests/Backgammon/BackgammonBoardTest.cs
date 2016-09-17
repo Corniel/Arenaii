@@ -10,7 +10,7 @@ namespace Arenaii.UnitTests.Backgammon
 		[Test]
 		public void ToString_Initial()
 		{
-			var board = new BackgammonBoard();
+			var board = new Board();
 			var act = board.ToString();
 			var exp = "{..}|X2|..|..|..|..|O5|=|..|O3|..|..|..|X5|=|O5|..|..|..|X3|..|=|X5|..|..|..|..|O2|{..} 0-0";
 

@@ -5,19 +5,19 @@ using System.Text;
 
 namespace Arenaii.Backgammon
 {
-	public class BackgammonBoard
+	public class Board
 	{
-		private readonly BackgammonField[] fields;
+		private readonly Field[] fields;
 		public const int BarXIndex = 0;
 		public const int BarOIndex = 25;
 
-		public BackgammonBoard()
+		public Board()
 		{
 			NotFinished = true;
-			fields = new BackgammonField[26];
+			fields = new Field[26];
 			for (var i = 0; i < 26; i++)
 			{
-				fields[i] = new BackgammonField();
+				fields[i] = new Field(i);
 			}
 			fields[BarXIndex].SetX(0);
 			fields[BarOIndex].SetO(0);
@@ -33,20 +33,41 @@ namespace Arenaii.Backgammon
 			fields[06].SetO(5);
 		}
 
-		public BackgammonField this[int index] { get { return fields[index]; } }
+		public Field this[int index] { get { return fields[index]; } }
 
-		public BackgammonField BarX { get { return this[BarXIndex]; } }
-		public BackgammonField BarO { get { return this[BarOIndex]; } }
+		public Field BarX { get { return this[BarXIndex]; } }
+		public Field BarO { get { return this[BarOIndex]; } }
+
+		public Field Bar { get { return XToMove ? BarX : BarO; } }
+		public Field BarOpponent { get { return XToMove ? BarO : BarX; } }
+
+		public int BearOffIndex { get { return XToMove ? BarOIndex : BarXIndex; } }
 
 		public int ScoreX { get { return 15 - fields.Where(field => field.OwnedByX).Sum(field => field.Stones); } }
-		public int ScoreO { get { return 15 - fields.Where(field => !field.OwnedByX).Sum(field => field.Stones); } }
+		public int ScoreO { get { return 15 - fields.Where(field => field.OwnedByO).Sum(field => field.Stones); } }
+
+		public bool CanBearOff { get { return XToMove ? XCanBearOff : OCanBearOff; } }
+		public bool XCanBearOff
+		{
+			get
+			{
+				return fields.Where(field => field.Index <= 18 && field.OwnedByX).Sum(field => field.Stones) == 0;
+			}
+		}
+		public bool OCanBearOff
+		{
+			get
+			{
+				return fields.Where(field => field.Index >= 6 && field.OwnedByO).Sum(field => field.Stones) == 0;
+			}
+		}
 
 		public bool NotFinished { get; private set; }
 		public bool XToMove { get; internal set; }
 		public bool XIsWinner { get; private set; }
 
 		public int Turn { get; internal set; }
-
+		
 		/// <summary>Renders the board to the console.</summary>
 		/// <remarks>
 		///  13 14 15 16 17 18      19 20 21 22 23 24
@@ -105,7 +126,7 @@ namespace Arenaii.Backgammon
 			Ident(); Console.WriteLine(" 12 11 10 09 08 07      06 05 04 03 02 01");
 		}
 
-		private void ValueToConsole(BackgammonField field, int row)
+		private void ValueToConsole(Field field, int row)
 		{
 			var val = row == 5 ? " " : ".";
 			if(field.Stones > row)
@@ -140,67 +161,128 @@ namespace Arenaii.Backgammon
 			Console.Write("   ");
 		}
 
-		public bool Apply(string move, int dice0, int dice1)
+		public void CheckFinished()
+		{
+			if(ScoreX == 15)
+			{
+				XIsWinner = true;
+				NotFinished = false;
+			}
+			else if(ScoreO == 15)
+			{
+				XIsWinner = false;
+				NotFinished = false;
+			}
+		}
+		public MoveResult Apply(string move, int dice0, int dice1)
 		{
 			// No move provided.
-			if (string.IsNullOrEmpty(move)){ return false; }
+			if (string.IsNullOrEmpty(move)){ return MoveResult.EmptyMove; }
 			
-			if (move == BackGammonMove.NoPlay.ToString())
+			if (move == Move.NoPlay.ToString())
 			{
 				return ApplyNoPlay(dice0, dice1);
 			}
 
-			var moves = new List<BackGammonMove>();
-			if(!ParseMoves(move, dice0, dice1, moves))
-			{
-				return false;
-			}
+			var moves = new List<Move>();
+			var result = ParseMoves(move, dice0, dice1, moves);
+			if (result != MoveResult.Ok) {return result; }
 
 			// Capture.
-			foreach(var m in moves)
+			foreach (var m in moves)
 			{
-				this[m.Source].Stones--;
-				if (this[m.Target].OwnedByX != XToMove)
+				result = Apply(m);
+				if(result != MoveResult.Ok)
 				{
-					this[m.Target].Stones = 0;
-					(XToMove ? BarO : BarX).Stones++;
-					this[m.Target].OwnedByX = XToMove;
-				}
-				// Bear-off
-				else if (m.Target == BarXIndex || m.Target == BarOIndex) { /* No adding. */ }
-				// Add a stone.
-				else
-				{
-					this[m.Target].Stones++;
-					this[m.Target].OwnedByX = XToMove;
+					return result;
 				}
 			}
-			return true;
+			return result;
 		}
 
-		private bool ParseMoves(string move, int dice0, int dice1, List<BackGammonMove> moves)
+		private MoveResult Apply(Move move)
 		{
-			foreach (var m in move.Split(','))
+			var source = this[move.Source];
+			var target = this[move.Target];
+
+			if (Bar.NotEmpty && move.Source != Bar.Index)
 			{
-				var mv = BackGammonMove.Parse(m, XToMove);
-				// invalid move.
-				if (BackGammonMove.NoPlay.Equals(mv))
+				return MoveResult.MustMoveFromBarFirst;
+			}
+			if (source.IsEmpty)
+			{
+				return MoveResult.NoStoneOnSourceField;
+			}
+			if (target.Index == BearOffIndex && !CanBearOff)
+			{
+				return MoveResult.BearOffIsNotAllowed;
+			}
+			// Bear off is never blocked.
+			if (target.Index != BearOffIndex && target.IsBlocked(XToMove))
+			{
+				return MoveResult.TargetFieldIsBlocked;
+			}
+
+			source.Stones--;
+			if (target.Index != BearOffIndex)
+			{
+				target.OwnedByX = XToMove;
+
+				// Add stone to bar of the opponent.
+				if (target.NotEmpty && target.OwnedByO == XToMove)
 				{
-					return false;
+					BarOpponent.Stones++;
+				}
+				else
+				{
+					target.Stones++;
+				}
+			}
+			else { /* just remove the stone from the field. */ }
+			return MoveResult.Ok;
+		}
+
+		private MoveResult ParseMoves(string str, int dice0, int dice1, List<Move> moves)
+		{
+			var dices = new List<int>() { dice0, dice1 };
+			if(dice0 == dice1)
+			{
+				dices.Add(dice0);
+				dices.Add(dice0);
+			}
+			foreach (var move in str.Split(','))
+			{
+				var mv = Move.Parse(move, XToMove);
+				// invalid move.
+				if (Move.NoPlay.Equals(mv))
+				{
+					return MoveResult.UnparsebleMove;
 				}
 				moves.Add(mv);
 			}
 			// To much moves supplied.
-			if (moves.Count > (dice0 == dice1 ? 4 : 2))
+			if (moves.Count > dices.Count)
 			{
-				return false;
+				return MoveResult.TooManyMoves;
 			}
-			return true;
+
+			// Validate dice/move mapping.
+			foreach(var move in moves)
+			{
+				var dice = dices.FirstOrDefault(d => move.IsValid(d, XToMove));
+				if(dice == 0)
+				{
+					return MoveResult.MoveDoesNotMatchDice;
+				}
+				dices.Remove(dice);
+			}
+
+			return MoveResult.Ok;
 		}
 
-		private bool ApplyNoPlay(int dic0, int dice1)
+		private MoveResult ApplyNoPlay(int dic0, int dice1)
 		{
-			return true;
+			return MoveResult.Ok;
 		}
 
 		public string GetGameUpdate()

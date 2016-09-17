@@ -36,7 +36,7 @@ namespace Arenaii.Backgammon
 					bot1.Write("settings bod_id 1");
 					bot2.Write("settings bot_id 2");
 
-					var board = new BackgammonBoard();
+					var board = new Board();
 
 					var time1 = timeMax;
 					var time2 = timeMax;
@@ -72,13 +72,18 @@ namespace Arenaii.Backgammon
 						board.ToConsole();
 						Console.WriteLine(@"{0:ss\:ff} {1:0000} {2}", bot1.Elapsed, bot1.Bot.Elo, bot1.Bot.FullName);
 						Console.WriteLine(@"{0:ss\:ff} {1:0000} {2}", bot2.Elapsed, bot2.Bot.Elo, bot2.Bot.FullName);
-						
-						if (bot.TimedOut || !board.Apply(move, dice0, dice1))
+
+						MoveResult moveResult = MoveResult.TimeOut;
+
+						if (bot.TimedOut || (moveResult = board.Apply(move, dice0, dice1)) != MoveResult.Ok)
 						{
 							board.Loses(xToMove);
+							bot.Write("Invalid move: {0}", moveResult);
 						}
 						else
 						{
+							board.CheckFinished();
+
 							var elapsed = bot.Elapsed - start;
 							var tm = time - elapsed + TimeSpan.FromMilliseconds(settings.TimePerMove);
 							if (xToMove)
