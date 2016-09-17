@@ -58,7 +58,7 @@ namespace Arenaii.Backgammon
 		{
 			get
 			{
-				return fields.Where(field => field.Index >= 6 && field.OwnedByO).Sum(field => field.Stones) == 0;
+				return fields.Where(field => field.Index > 6 && field.OwnedByO).Sum(field => field.Stones) == 0;
 			}
 		}
 
