@@ -67,7 +67,41 @@ namespace Arenaii.Backgammon
 		public bool XIsWinner { get; private set; }
 
 		public int Turn { get; internal set; }
-		
+
+		public int TipX
+		{
+			get
+			{
+				var tip = 0;
+
+				for(var i = 0; i <= 24;i++)
+				{
+					if(this[i].OwnedByX)
+					{
+						tip += this[i].Stones * (25 - i);
+					}
+				}
+				return tip;
+			}
+		}
+		public int TipO
+		{
+			get
+			{
+				var tip = 0;
+
+				for (var i = 25; i >= 1; i--)
+				{
+					if (this[i].OwnedByO)
+					{
+						tip += this[i].Stones * i;
+					}
+				}
+				return tip;
+			}
+		}
+
+
 		/// <summary>Renders the board to the console.</summary>
 		/// <remarks>
 		///  13 14 15 16 17 18      19 20 21 22 23 24
@@ -124,6 +158,12 @@ namespace Arenaii.Backgammon
 			}
 			Ident(); Console.WriteLine("o------------------o  o------------------o");
 			Ident(); Console.WriteLine(" 12 11 10 09 08 07      06 05 04 03 02 01");
+			Ident(); Console.WriteLine();
+			Ident(); Console.WriteLine("X {0,-2} (TIP {1,-3} BAR {4})  O {2,-2} (TIP {3,-3} BAR {5})", 
+				ScoreX,	TipX, 
+				ScoreO, TipO,
+				BarX.Stones, BarO.Stones);
+			Ident(); Console.WriteLine();
 		}
 
 		private void ValueToConsole(Field field, int row)

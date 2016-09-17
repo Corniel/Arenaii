@@ -70,8 +70,14 @@ namespace Arenaii.Backgammon
 
 						Console.Clear();
 						board.ToConsole();
-						Console.WriteLine(@"{0:ss\:ff} {1:0000} {2}", bot1.Elapsed, bot1.Bot.Elo, bot1.Bot.FullName);
-						Console.WriteLine(@"{0:ss\:ff} {1:0000} {2}", bot2.Elapsed, bot2.Bot.Elo, bot2.Bot.FullName);
+						Console.BackgroundColor = ConsoleColor.Red;
+						Console.Write(" ");
+						Console.BackgroundColor = ConsoleColor.Black;
+						Console.WriteLine(@" {0:ss\:ff} {1:0000} {2}", bot1.Elapsed, bot1.Bot.Elo, bot1.Bot.FullName);
+						Console.BackgroundColor = ConsoleColor.Blue;
+						Console.Write(" ");
+						Console.BackgroundColor = ConsoleColor.Black;
+						Console.WriteLine(@" {0:ss\:ff} {1:0000} {2}", bot2.Elapsed, bot2.Bot.Elo, bot2.Bot.FullName);
 
 						MoveResult moveResult = MoveResult.TimeOut;
 
