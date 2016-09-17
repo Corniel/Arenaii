@@ -33,5 +33,10 @@ namespace Arenaii.Backgammon
 		{
 			return OwnedByX != xToMove && Stones > 1;
 		}
+		public override string ToString()
+		{
+			if (Stones == 0) { return ".."; }
+			return string.Format("{0}{1}", OwnedByX ? "X" : "O", Stones);
+		}
 	}
 }
