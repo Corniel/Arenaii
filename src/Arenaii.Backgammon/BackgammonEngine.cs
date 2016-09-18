@@ -69,7 +69,7 @@ namespace Arenaii.Backgammon
 						bot.Stop();
 
 						Console.Clear();
-						board.ToConsole();
+						board.ToConsole(dice0, dice1);
 						Console.BackgroundColor = ConsoleColor.Red;
 						Console.Write(" ");
 						Console.BackgroundColor = ConsoleColor.Black;

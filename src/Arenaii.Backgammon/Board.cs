@@ -68,15 +68,15 @@ namespace Arenaii.Backgammon
 
 		public int Turn { get; internal set; }
 
-		public int TipX
+		public int PipX
 		{
-			get
+			geta
 			{
 				var tip = 0;
 
-				for(var i = 0; i <= 24;i++)
+				for (var i = 0; i <= 24; i++)
 				{
-					if(this[i].OwnedByX)
+					if (this[i].OwnedByX)
 					{
 						tip += this[i].Stones * (25 - i);
 					}
@@ -84,7 +84,7 @@ namespace Arenaii.Backgammon
 				return tip;
 			}
 		}
-		public int TipO
+		public int PipO
 		{
 			get
 			{
@@ -120,16 +120,16 @@ namespace Arenaii.Backgammon
 		/// o------------------o  o------------------o
 		///  12 11 10 09 08 07      06 05 04 03 02 01
 		/// </remarks>
-		public void ToConsole()
+		public void ToConsole(int dice0, int dice1)
 		{
 			Ident(); Console.WriteLine(" 13 14 15 16 17 18      19 20 21 22 23 24");
 			Ident(); Console.WriteLine("o------------------o  o------------------o");
-			for(var row = 0; row <= 5; row++)
+			for (var row = 0; row <= 5; row++)
 			{
 				Ident();
 				Console.Write("|");
 
-				for(var field = 13; field <= 18; field++)
+				for (var field = 13; field <= 18; field++)
 				{
 					ValueToConsole(this[field], row);
 				}
@@ -138,7 +138,9 @@ namespace Arenaii.Backgammon
 				{
 					ValueToConsole(this[field], row);
 				}
-				Console.WriteLine("|");
+				Console.Write("|");
+				ValueToConsole(BarO, row, true);
+				Console.WriteLine();
 			}
 			for (var row = 5; row >= 0; row--)
 			{
@@ -154,36 +156,41 @@ namespace Arenaii.Backgammon
 				{
 					ValueToConsole(this[field], row);
 				}
-				Console.WriteLine("|");
+				Console.Write("|");
+				ValueToConsole(BarX, row, true);
+				Console.WriteLine();
 			}
 			Ident(); Console.WriteLine("o------------------o  o------------------o");
 			Ident(); Console.WriteLine(" 12 11 10 09 08 07      06 05 04 03 02 01");
-			Ident(); Console.WriteLine();
-			Ident(); Console.WriteLine("X {0,-2} (TIP {1,-3} BAR {4})  O {2,-2} (TIP {3,-3} BAR {5})", 
-				ScoreX,	TipX, 
-				ScoreO, TipO,
-				BarX.Stones, BarO.Stones);
-			Ident(); Console.WriteLine();
+			Console.WriteLine();
+			Ident(); Console.WriteLine("                 [{0}]  [{1}]", Math.Max(dice0, dice1), Math.Min(dice0, dice1));
+			Console.WriteLine();
+			RenderPip(PipX, ConsoleColor.Red, XToMove);
+			RenderPip(PipO, ConsoleColor.Blue, !XToMove);
+			Console.WriteLine();
+			Ident(); RenderScore(ScoreX, ConsoleColor.Red);
+			Ident(); RenderScore(ScoreO, ConsoleColor.Blue);
+			Console.WriteLine();
 		}
 
-		private void ValueToConsole(Field field, int row)
+		private void ValueToConsole(Field field, int row, bool isBar = false)
 		{
-			var val = row == 5 ? " " : ".";
-			if(field.Stones > row)
+			var val = row == 5 || isBar ? " " : ".";
+			if (field.Stones > row)
 			{
 				val = "O";
 			}
-			if(row == 5 && field.Stones > 6)
+			if (row == 5 && field.Stones > 6)
 			{
 				val = field.Stones.ToString();
 			}
-			if(val.Length == 1)
+			if (val.Length == 1)
 			{
 				Console.Write(" ");
 			}
-			if(val != "." && val != " ")
+			if (val != "." && val != " ")
 			{
-				if(field.OwnedByX)
+				if (field.OwnedByX)
 				{
 					Console.BackgroundColor = ConsoleColor.Red;
 				}
@@ -198,17 +205,59 @@ namespace Arenaii.Backgammon
 		}
 		private void Ident()
 		{
-			Console.Write("   ");
+			Console.Write("  ");
+		}
+
+		private void RenderPip(int pip, ConsoleColor color, bool toMove)
+		{
+			if (toMove)
+			{
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.Write("* ");
+				Console.ForegroundColor = ConsoleColor.Gray;
+			}
+			else
+			{
+				Console.Write("  ");
+			}
+
+			var value = pip.ToString();
+			var length = Math.Max(0, pip / 3 - value.Length);
+			Console.BackgroundColor = color;
+			Console.Write(value);
+			Console.Write(new string(' ', length));
+			Console.BackgroundColor = ConsoleColor.Black;
+
+			Console.WriteLine();
+		}
+
+		private void RenderScore(int score, ConsoleColor color)
+		{
+			if (score == 0)
+			{
+				Console.ForegroundColor = color;
+				Console.WriteLine(score);
+				Console.ForegroundColor = ConsoleColor.Gray;
+				return;
+			}
+
+			var value = score.ToString();
+			var length = Math.Max(0, score - value.Length);
+			Console.BackgroundColor = color;
+			Console.Write(value);
+			Console.Write(new string(' ', length));
+			Console.BackgroundColor = ConsoleColor.Black;
+			Console.WriteLine();
 		}
 
 		public void CheckFinished()
 		{
-			if(ScoreX == 15)
+			if (ScoreX == 15)
 			{
 				XIsWinner = true;
 				NotFinished = false;
 			}
-			else if(ScoreO == 15)
+			else if (ScoreO == 15)
 			{
 				XIsWinner = false;
 				NotFinished = false;
@@ -217,8 +266,8 @@ namespace Arenaii.Backgammon
 		public MoveResult Apply(string move, int dice0, int dice1)
 		{
 			// No move provided.
-			if (string.IsNullOrEmpty(move)){ return MoveResult.EmptyMove; }
-			
+			if (string.IsNullOrEmpty(move)) { return MoveResult.EmptyMove; }
+
 			if (move == Move.NoPlay.ToString())
 			{
 				return ApplyNoPlay(dice0, dice1);
@@ -226,13 +275,12 @@ namespace Arenaii.Backgammon
 
 			var moves = new List<Move>();
 			var result = ParseMoves(move, dice0, dice1, moves);
-			if (result != MoveResult.Ok) {return result; }
+			if (result != MoveResult.Ok) { return result; }
 
-			// Capture.
 			foreach (var m in moves)
 			{
 				result = Apply(m);
-				if(result != MoveResult.Ok)
+				if (result != MoveResult.Ok)
 				{
 					return result;
 				}
@@ -266,8 +314,6 @@ namespace Arenaii.Backgammon
 			source.Stones--;
 			if (target.Index != BearOffIndex)
 			{
-				target.OwnedByX = XToMove;
-
 				// Add stone to bar of the opponent.
 				if (target.NotEmpty && target.OwnedByO == XToMove)
 				{
@@ -277,6 +323,9 @@ namespace Arenaii.Backgammon
 				{
 					target.Stones++;
 				}
+
+				// Set new owner.
+				target.OwnedByX = XToMove;
 			}
 			else { /* just remove the stone from the field. */ }
 			return MoveResult.Ok;
@@ -285,7 +334,7 @@ namespace Arenaii.Backgammon
 		private MoveResult ParseMoves(string str, int dice0, int dice1, List<Move> moves)
 		{
 			var dices = new List<int>() { dice0, dice1 };
-			if(dice0 == dice1)
+			if (dice0 == dice1)
 			{
 				dices.Add(dice0);
 				dices.Add(dice0);
@@ -307,10 +356,10 @@ namespace Arenaii.Backgammon
 			}
 
 			// Validate dice/move mapping.
-			foreach(var move in moves)
+			foreach (var move in moves)
 			{
 				var dice = dices.FirstOrDefault(d => move.IsValid(d, XToMove));
-				if(dice == 0)
+				if (dice == 0)
 				{
 					return MoveResult.MoveDoesNotMatchDice;
 				}
