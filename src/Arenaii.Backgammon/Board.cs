@@ -70,7 +70,7 @@ namespace Arenaii.Backgammon
 
 		public int PipX
 		{
-			geta
+			get
 			{
 				var tip = 0;
 
