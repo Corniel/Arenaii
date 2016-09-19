@@ -78,7 +78,10 @@ namespace Arenaii.Data
 
 		public static Bot Create(DirectoryInfo directory)
 		{
-			var file = directory.GetFiles().FirstOrDefault(f => f.Name == directory.Name && f.Extension == ".exe");
+			var file = directory
+				.GetFiles()
+				.FirstOrDefault(f => f.Name.ToUpperInvariant() == (directory.Name + ".EXE").ToUpperInvariant());
+
 			if (file != null)
 			{
 				return Create(file);
