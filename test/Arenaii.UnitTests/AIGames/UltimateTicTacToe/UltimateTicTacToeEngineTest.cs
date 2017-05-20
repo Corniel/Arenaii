@@ -1,15 +1,9 @@
 ﻿using Arenaii.AIGames.UltimateTicTacToe;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Arenaii.UnitTests.AIGames.UltimateTicTacToe
 {
-	[TestFixture]
-	public class UltimateTicTacToeEngineTest
+    public class UltimateTicTacToeEngineTest
 	{
 		[Test]
 		public void Apply_20_()

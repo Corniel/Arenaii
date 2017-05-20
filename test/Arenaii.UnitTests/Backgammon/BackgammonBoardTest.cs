@@ -4,7 +4,6 @@ using System;
 
 namespace Arenaii.UnitTests.Backgammon
 {
-	[TestFixture]
 	public class BackgammonBoardTest
 	{
 		[Test]

@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Arenaii.UnitTests.AIGames.UltimateTicTacToe
 {
-	[TestFixture, Ignore("Manual only")]
+	[Ignore("Manual only")]
 	public class UltimateTicTacToeCompetitionTest
 	{
 		[Test]

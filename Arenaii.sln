@@ -1,22 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.4
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arenaii", "Arenaii\Arenaii.csproj", "{2B3A8EDE-4064-4BF2-AA11-0CE72432A5AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arenaii.UnitTests", "test\Arenaii.UnitTests\Arenaii.UnitTests.csproj", "{EE840241-C8E1-41CF-93BE-04121F850817}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arenaii.UnitTests", "Arenaii.UnitTests\Arenaii.UnitTests.csproj", "{EE840241-C8E1-41CF-93BE-04121F850817}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arenaii", "src\Arenaii\Arenaii.csproj", "{2B3A8EDE-4064-4BF2-AA11-0CE72432A5AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arenaii.AIGames", "Arenaii.AIGames\Arenaii.AIGames.csproj", "{D28327D6-2D35-4147-B64C-E8BD1B97A9E8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arenaii.AIGames.UltimateTicTacToe", "Arenaii.AIGames.UltimateTicTacToe\Arenaii.AIGames.UltimateTicTacToe.csproj", "{BBD06067-0B4C-46CF-8F3A-32373AF091C2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arenaii.AIGames", "src\Arenaii.AIGames\Arenaii.AIGames.csproj", "{D28327D6-2D35-4147-B64C-E8BD1B97A9E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F567E1E8-F01F-4C21-996D-58D7D9B45DE3}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arenaii.Backgammon", "Arenaii.Backgammon\Arenaii.Backgammon.csproj", "{578B2669-E064-424E-9171-79E78779420C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{80036786-65CF-4E9D-8ACC-9E9946097E86}"
 	ProjectSection(SolutionItems) = preProject
@@ -24,34 +20,43 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{800367
 		Shared\AssemblyInfo.Version.cs = Shared\AssemblyInfo.Version.cs
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arenaii.Backgammon", "src\Arenaii.Backgammon\Arenaii.Backgammon.csproj", "{578B2669-E064-424E-9171-79E78779420C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arenaii.AIGames.UltimateTicTacToe", "src\Arenaii.AIGames.UltimateTicTacToe\Arenaii.AIGames.UltimateTicTacToe.csproj", "{BBD06067-0B4C-46CF-8F3A-32373AF091C2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{47039D48-EF0D-4D60-A2E9-5C94B73E7FA3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2B3A8EDE-4064-4BF2-AA11-0CE72432A5AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B3A8EDE-4064-4BF2-AA11-0CE72432A5AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B3A8EDE-4064-4BF2-AA11-0CE72432A5AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B3A8EDE-4064-4BF2-AA11-0CE72432A5AC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EE840241-C8E1-41CF-93BE-04121F850817}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EE840241-C8E1-41CF-93BE-04121F850817}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE840241-C8E1-41CF-93BE-04121F850817}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE840241-C8E1-41CF-93BE-04121F850817}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B3A8EDE-4064-4BF2-AA11-0CE72432A5AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B3A8EDE-4064-4BF2-AA11-0CE72432A5AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B3A8EDE-4064-4BF2-AA11-0CE72432A5AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B3A8EDE-4064-4BF2-AA11-0CE72432A5AC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D28327D6-2D35-4147-B64C-E8BD1B97A9E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D28327D6-2D35-4147-B64C-E8BD1B97A9E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D28327D6-2D35-4147-B64C-E8BD1B97A9E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D28327D6-2D35-4147-B64C-E8BD1B97A9E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BBD06067-0B4C-46CF-8F3A-32373AF091C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BBD06067-0B4C-46CF-8F3A-32373AF091C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BBD06067-0B4C-46CF-8F3A-32373AF091C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BBD06067-0B4C-46CF-8F3A-32373AF091C2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{578B2669-E064-424E-9171-79E78779420C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{578B2669-E064-424E-9171-79E78779420C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{578B2669-E064-424E-9171-79E78779420C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{578B2669-E064-424E-9171-79E78779420C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBD06067-0B4C-46CF-8F3A-32373AF091C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBD06067-0B4C-46CF-8F3A-32373AF091C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBD06067-0B4C-46CF-8F3A-32373AF091C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBD06067-0B4C-46CF-8F3A-32373AF091C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EE840241-C8E1-41CF-93BE-04121F850817} = {47039D48-EF0D-4D60-A2E9-5C94B73E7FA3}
 	EndGlobalSection
 EndGlobal

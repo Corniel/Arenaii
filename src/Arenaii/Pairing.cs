@@ -9,7 +9,7 @@ namespace Arenaii
 			Bot1 = bot1;
 			Bot2 = bot2;
 		}
-
+ 
 		public Bot Bot1 { get; set; }
 		public Bot Bot2 { get; set; }
 	}
