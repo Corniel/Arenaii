@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Text;
 
 namespace Arenaii.AIGames.LightRiders
 {
@@ -13,9 +14,25 @@ namespace Arenaii.AIGames.LightRiders
             SetPlayer1(new Point(7, 12));
         }
 
+        public int Round
+        {
+            get
+            {
+                var round = 0;
+                for (var x = 0; x < 16; x++)
+                {
+                    for (var y = 0; y < 16; y++)
+                    {
+                        if (Fields[x, y] != FieldType.Empty) { round++; }
+                    }
+                }
+                return (round / 2) - 1;
+            }
+        }
+
+
         public Point Player0 { get; private set; }
         public Point Player1 { get; private set; }
-
 
         private void SetPlayer0(Point point)
         {
@@ -143,7 +160,33 @@ namespace Arenaii.AIGames.LightRiders
 
         public string GetGameUpdate()
         {
-            return string.Empty;
+            var sb = new StringBuilder();
+            sb.AppendLine(GetRoundUpdate());
+            sb.AppendLine(GetFieldUpdate());
+            return sb.ToString();
+        }
+
+        private string GetFieldUpdate()
+        {
+            var chars = new char[256];
+            var index = 0;
+
+            for (var x = 0; x < 16; x++)
+            {
+                for (var y = 0; y < 16; y++)
+                {
+                    if (Player0.X == x && Player0.Y == y) { chars[index++] = '0'; }
+                    else if (Player1.X == x && Player1.Y == y) { chars[index++] = '1'; }
+                    else if (Fields[x, y] == FieldType.Empty) { chars[index++] = '.'; }
+                    else { chars[index++] = 'x'; }
+                }
+            }
+            return "update game field " + string.Join(",", chars);
+        }
+
+        public string GetRoundUpdate()
+        {
+            return string.Format("update game round {0}", Round);
         }
 
         private static void ColorMarker(ConsoleColor color)
