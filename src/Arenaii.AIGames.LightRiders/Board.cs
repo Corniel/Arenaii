@@ -78,21 +78,30 @@ namespace Arenaii.AIGames.LightRiders
                                 break;
                         }
                     }
-                    if (y % 4 == 3 && y != 15)
-                    {
-                        Console.Write('|');
-                    }
+                    WriteVerticalMarker(y);
                 }
-                Console.WriteLine();
-
-                if (x % 4 == 3 && x != 15)
-
-                {
-                    Ident(); Console.WriteLine("----o----o----o----");
-                }
+                WriteHorizontalMarker(x);
             }
 
             Console.WriteLine();
+        }
+
+        private static void WriteHorizontalMarker(int x)
+        {
+            Console.WriteLine();
+
+            if (x % 4 == 3 && x != 15)
+
+            {
+                Ident(); Console.WriteLine("----o----o----o----");
+            }
+        }
+        private static void WriteVerticalMarker(int y)
+        {
+            if (y % 4 == 3 && y != 15)
+            {
+                Console.Write('|');
+            }
         }
 
         public BoardState Apply(string move0, string move1)
@@ -166,7 +175,7 @@ namespace Arenaii.AIGames.LightRiders
             return sb.ToString();
         }
 
-        private string GetFieldUpdate()
+        public string GetFieldUpdate()
         {
             var chars = new char[256];
             var index = 0;

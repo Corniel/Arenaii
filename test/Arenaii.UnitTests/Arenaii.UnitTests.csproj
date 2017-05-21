@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AIGames\LightRiders\BoardTest.cs" />
     <Compile Include="AIGames\UltimateTicTacToe\UltimateTicTacToeCompetitionTest.cs" />
     <Compile Include="AIGames\UltimateTicTacToe\UltimateTicTacToeEngineTest.cs" />
     <Compile Include="Backgammon\BackgammonBoardTest.cs" />
@@ -68,6 +69,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Arenaii.AIGames.LightRiders\Arenaii.AIGames.LightRiders.csproj">
+      <Project>{CF51AC49-D68F-4096-A201-1C668A3BC0B8}</Project>
+      <Name>Arenaii.AIGames.LightRiders</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Arenaii.AIGames.UltimateTicTacToe\Arenaii.AIGames.UltimateTicTacToe.csproj">
       <Project>{bbd06067-0b4c-46cf-8f3a-32373af091c2}</Project>
       <Name>Arenaii.AIGames.UltimateTicTacToe</Name>
