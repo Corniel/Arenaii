@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 
@@ -23,30 +24,37 @@ namespace Arenaii.AIGames.LightRiders
                 {
                     for (var y = 0; y < 16; y++)
                     {
-                        if (Fields[x, y] != FieldType.Empty) { round++; }
+                        if (Fields[x, y] > FieldType.Empty) { round++; }
                     }
                 }
                 return (round / 2) - 1;
             }
         }
 
-
         public Point Player0 { get; private set; }
         public Point Player1 { get; private set; }
+
+        public FieldType this[Point point]
+        {
+            get { return Fields[point.X, point.Y]; }
+            set { Fields[point.X, point.Y] = value; }
+        }
+
 
         private void SetPlayer0(Point point)
         {
             Player0 = point;
-            Fields[point.X, point.Y] = FieldType.Red;
+            this[point] = FieldType.Red;
         }
         private void SetPlayer1(Point point)
         {
             Player1 = point;
-            Fields[point.X, point.Y] = FieldType.Blue;
+            this[point] = FieldType.Green;
         }
 
         public void ToConsole()
         {
+            UpdateLayout();
             Console.WriteLine();
             Ident(); ColorMarker(ConsoleColor.White, "o================o");
             Console.WriteLine();
@@ -71,12 +79,20 @@ namespace Arenaii.AIGames.LightRiders
                                 ColorField(ConsoleColor.Red);
                                 break;
 
-                            case FieldType.Blue:
+                            case FieldType.Green:
                                 ColorField(ConsoleColor.Green);
                                 break;
 
+                            case FieldType.CloserToRed:
+                                ColorMarker(ConsoleColor.DarkRed, "+");
+                                break;
+
+                            case FieldType.CloserToGreen:
+                                ColorMarker(ConsoleColor.DarkGreen, "+");
+                                break;
+
                             default:
-                                ColorMarker(ConsoleColor.DarkGray, "+");
+                                ColorMarker(ConsoleColor.DarkGray, "·");
                                 break;
                         }
                     }
@@ -96,7 +112,7 @@ namespace Arenaii.AIGames.LightRiders
             var m1 = GetMove(move1);
 
             m0 = Apply(Player0, m0, FieldType.Red);
-            m1 = Apply(Player1, m1, FieldType.Blue);
+            m1 = Apply(Player1, m1, FieldType.Green);
 
             if (m0 == Move.None || m1 == Move.None)
             {
@@ -125,9 +141,7 @@ namespace Arenaii.AIGames.LightRiders
             }
             var p = point.Move(move);
 
-            if (p.X < 0 || p.X > 15 ||
-                p.Y < 0 || p.Y > 15 ||
-                Fields[p.X, p.Y] != FieldType.Empty)
+            if (!p.IsOnBoard() || this[p] > FieldType.Empty)
             {
                 return Move.None;
             }
@@ -143,10 +157,56 @@ namespace Arenaii.AIGames.LightRiders
             return move;
         }
 
+        private void UpdateLayout()
+        {
+            MarkEmptyFieldsAsUnreachable();
+
+            var done = new HashSet<Point>();
+            done.Add(Player0);
+            done.Add(Player1);
+
+            var q0 = new Queue<Point>(new[] { Player0 });
+            var q1 = new Queue<Point>(new[] { Player1 });
+
+            while (q0.Count != 0 || q1.Count != 0)
+            {
+                LoopNeighbors(q0, done, FieldType.CloserToRed);
+                LoopNeighbors(q1, done, FieldType.CloserToGreen);
+            }
+        }
+
+        private void LoopNeighbors(Queue<Point> queue, HashSet<Point> done, FieldType marker)
+        {
+            var count = queue.Count;
+            for (var i = 0; i < count; i++)
+            {
+                var point = queue.Dequeue();
+
+                foreach (var neighbor in point.GetNeighbors())
+                {
+                    if (done.Contains(neighbor) || this[neighbor] > FieldType.Empty) { continue; }
+
+                    done.Add(neighbor);
+                    this[neighbor] = marker;
+                    queue.Enqueue(neighbor);
+                }
+            }
+        }
+
+        private void MarkEmptyFieldsAsUnreachable()
+        {
+            for (var x = 0; x < 16; x++)
+            {
+                for (var y = 0; y < 16; y++)
+                {
+                    if (Fields[x, y] <= FieldType.Empty) { Fields[x, y] = FieldType.Unreachable; }
+                }
+            }
+        }
+
         private Move GetMove(string move)
         {
-            Move m;
-            if (Enum.TryParse(move, out m))
+            if (Enum.TryParse(move, out Move m))
             {
                 return m;
             }
@@ -172,7 +232,7 @@ namespace Arenaii.AIGames.LightRiders
                 {
                     if (Player0.X == x && Player0.Y == y) { chars[index++] = '0'; }
                     else if (Player1.X == x && Player1.Y == y) { chars[index++] = '1'; }
-                    else if (Fields[x, y] == FieldType.Empty) { chars[index++] = '.'; }
+                    else if (Fields[x, y] <= FieldType.Empty) { chars[index++] = '.'; }
                     else { chars[index++] = 'x'; }
                 }
             }
@@ -201,20 +261,6 @@ namespace Arenaii.AIGames.LightRiders
         private static void Ident()
         {
             Console.Write("  ");
-        }
-    }
-    internal static class PointExtensions
-    {
-        public static Point Move(this Point p, Move move)
-        {
-            switch (move)
-            {
-                case LightRiders.Move.up: /*   */ return new Point(p.X - 1, p.Y + 0);
-                case LightRiders.Move.right: /**/ return new Point(p.X + 0, p.Y + 1);
-                case LightRiders.Move.down: /* */ return new Point(p.X + 1, p.Y + 0);
-                case LightRiders.Move.left: /* */ return new Point(p.X + 0, p.Y - 1);
-                default: return p;
-            }
         }
     }
 }
