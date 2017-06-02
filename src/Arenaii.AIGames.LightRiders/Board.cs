@@ -48,18 +48,20 @@ namespace Arenaii.AIGames.LightRiders
         public void ToConsole()
         {
             Console.WriteLine();
+            Ident(); ColorMarker(ConsoleColor.White, "o================o");
+            Console.WriteLine();
             for (var x = 0; x < 16; x++)
             {
-                Ident();
+                Ident(); ColorMarker(ConsoleColor.White, "|");
                 for (var y = 0; y < 16; y++)
                 {
                     if (Player0.X == x && Player0.Y == y)
                     {
-                        ColorMarker(ConsoleColor.Red);
+                        ColorMarker(ConsoleColor.Red, "X");
                     }
                     else if (Player1.X == x && Player1.Y == y)
                     {
-                        ColorMarker(ConsoleColor.Blue);
+                        ColorMarker(ConsoleColor.Green, "X");
                     }
                     else
                     {
@@ -70,38 +72,22 @@ namespace Arenaii.AIGames.LightRiders
                                 break;
 
                             case FieldType.Blue:
-                                ColorField(ConsoleColor.Blue);
+                                ColorField(ConsoleColor.Green);
                                 break;
 
                             default:
-                                ColorField(ConsoleColor.Black);
+                                ColorMarker(ConsoleColor.DarkGray, "+");
                                 break;
                         }
                     }
-                    WriteVerticalMarker(y);
                 }
-                WriteHorizontalMarker(x);
+                ColorMarker(ConsoleColor.White, "|");
+                Console.WriteLine();
             }
-
-            Console.WriteLine();
-        }
-
-        private static void WriteHorizontalMarker(int x)
-        {
+            Ident(); ColorMarker(ConsoleColor.White, "o================o");
             Console.WriteLine();
 
-            if (x % 4 == 3 && x != 15)
-
-            {
-                Ident(); Console.WriteLine("----o----o----o----");
-            }
-        }
-        private static void WriteVerticalMarker(int y)
-        {
-            if (y % 4 == 3 && y != 15)
-            {
-                Console.Write('|');
-            }
+            Console.WriteLine();
         }
 
         public BoardState Apply(string move0, string move1)
@@ -198,10 +184,10 @@ namespace Arenaii.AIGames.LightRiders
             return string.Format("update game round {0}", Round);
         }
 
-        private static void ColorMarker(ConsoleColor color)
+        private static void ColorMarker(ConsoleColor color, string str)
         {
             Console.ForegroundColor = color;
-            Console.Write("X");
+            Console.Write(str);
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
