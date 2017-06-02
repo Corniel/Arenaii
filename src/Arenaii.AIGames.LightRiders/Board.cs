@@ -206,7 +206,8 @@ namespace Arenaii.AIGames.LightRiders
 
         private Move GetMove(string move)
         {
-            if (Enum.TryParse(move, out Move m))
+            Move m;
+            if (Enum.TryParse(move, out m))
             {
                 return m;
             }
