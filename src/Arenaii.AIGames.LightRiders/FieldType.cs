@@ -8,6 +8,5 @@
         Empty = 0,
         Red,
         Green,
-        
     }
 }

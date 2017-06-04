@@ -31,6 +31,24 @@ namespace Arenaii.AIGames.LightRiders
             }
         }
 
+        public int Score
+        {
+            get
+            {
+                var score = 0;
+                for (var x = 0; x < 16; x++)
+                {
+                    for (var y = 0; y < 16; y++)
+                    {
+                        if /**/ (Fields[x, y].IsRed()) { score++; }
+                        else if (Fields[x, y].IsGreen()) { score--; }
+                    }
+                }
+                return score;
+            }
+        }
+
+
         public Point Player0 { get; private set; }
         public Point Player1 { get; private set; }
 
@@ -56,7 +74,7 @@ namespace Arenaii.AIGames.LightRiders
         {
             UpdateLayout();
             Console.WriteLine();
-            Ident(); ColorMarker(ConsoleColor.White, "o================o");
+            Ident(); ColorMarker(ConsoleColor.White, "o----------------o");
             Console.WriteLine();
             for (var x = 0; x < 16; x++)
             {
@@ -100,9 +118,23 @@ namespace Arenaii.AIGames.LightRiders
                 ColorMarker(ConsoleColor.White, "|");
                 Console.WriteLine();
             }
-            Ident(); ColorMarker(ConsoleColor.White, "o================o");
+            Ident(); ColorMarker(ConsoleColor.White, "o----------------o");
             Console.WriteLine();
-
+            Ident(); ColorMarker(ConsoleColor.Gray, "["); ColorMarker(ConsoleColor.White, Round.ToString("000")); ColorMarker(ConsoleColor.Gray, "]");
+            var sc = Score;
+            if (sc == 0)
+            {
+                ColorMarker(ConsoleColor.Gray, "   =0");
+            }
+            else if(sc > 0)
+            {
+                ColorMarker(ConsoleColor.Red, string.Format("{0,5}", '+' + sc.ToString()));
+            }
+            else
+            {
+                ColorMarker(ConsoleColor.Green, string.Format("{0,5}", '+' + (-sc).ToString()));
+            }
+            Console.WriteLine();
             Console.WriteLine();
         }
 
