@@ -30,16 +30,24 @@ namespace Arenaii.Data
         {
             Guard.NotNull(bot, "bot");
 
+            Bots.Remove(bot);
+            RemoveUnlinkedMatches();
+        }
+
+        public void RemoveUnlinkedMatches()
+        {
+            var ids = new HashSet<string>(Bots.Select(bot => bot.Id));
             for (var index = Matches.Count - 1; index >= 0; index--)
             {
                 var match = Matches[index];
-                if (match.Id1 == bot.Id || match.Id2 == bot.Id)
+                if (ids.Contains(match.Id1) && ids.Contains(match.Id2))
                 {
-                    Matches.Remove(match);
+                    continue;
                 }
+                Matches.Remove(match);
             }
-            Bots.Remove(bot);
         }
+
         public IEnumerable<WeightedResult> GetWeightedResults()
         {
             return Settings.IsSymetric ? GetSymetricWeightedResults() : GetASymetricWeightedResults();
@@ -216,7 +224,9 @@ namespace Arenaii.Data
             using (var stream = file.OpenRead())
             {
                 var serializer = new XmlSerializer(typeof(TCompetition));
-                return (TCompetition)serializer.Deserialize(stream);
+                var data = (TCompetition)serializer.Deserialize(stream);
+                data.RemoveUnlinkedMatches();
+                return data;
             }
         }
     }
