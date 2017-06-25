@@ -53,7 +53,7 @@ namespace Arenaii.Platform
 				return string.Empty;
 			}
 			Stop();
-			Log("Resonse: {0}", task.Result);
+			Log("Response: {0}", task.Result);
 			return task.Result;
 		}
 

@@ -8,7 +8,7 @@ namespace Arenaii
 		where TCompetition : Competition<TSettings>
 		where TSettings : Settings
 	{
-		public Simulator()
+		protected Simulator()
 		{
 			Competition = Competition<TSettings>.Load<TCompetition>();
 		}

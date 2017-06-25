@@ -50,8 +50,10 @@
     <Compile Include="Data\LightRidersCompetition.cs" />
     <Compile Include="Data\LightRidersSettings.cs" />
     <Compile Include="FieldType.cs" />
+    <Compile Include="FieldTypeExtensions.cs" />
     <Compile Include="LightRidersEngine.cs" />
     <Compile Include="Move.cs" />
+    <Compile Include="PointExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
