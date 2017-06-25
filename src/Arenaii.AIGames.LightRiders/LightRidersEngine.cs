@@ -12,6 +12,7 @@ namespace Arenaii.AIGames.LightRiders
         {
             var settings = competition.Settings;
             var timeMax = TimeSpan.FromMilliseconds(settings.TimeBank);
+			var random = new Random();
 
             using (var bot0 = ConsoleBot.Create(pairing.Bot1))
             {
@@ -28,7 +29,7 @@ namespace Arenaii.AIGames.LightRiders
                     bot0.Write("settings your_bot player0\r\nsettings your_botid 0\r\n");
                     bot1.Write("settings your_bot player1\r\nsettings your_botid 1\r\n");
 
-                    var board = new Board();
+                    var board = new Board(random);
 
                     var time0 = timeMax;
                     var time1 = timeMax;

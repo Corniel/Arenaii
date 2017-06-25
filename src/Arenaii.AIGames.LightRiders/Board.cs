@@ -8,10 +8,12 @@ namespace Arenaii.AIGames.LightRiders
     {
         private readonly FieldType[,] Fields = new FieldType[16, 16];
 
-        public Board()
+        public Board(Random random)
         {
-            SetPlayer0(new Point(7, 03));
-            SetPlayer1(new Point(7, 12));
+			int x = random.Next(6) + 1;
+			int y = random.Next(14) + 1;
+            SetPlayer0(new Point(x, y));
+            SetPlayer1(new Point(15 - x, y));
         }
 
         public int Round
@@ -48,10 +50,10 @@ namespace Arenaii.AIGames.LightRiders
         public void ToConsole()
         {
             Console.WriteLine();
-            for (var x = 0; x < 16; x++)
+            for (var y = 0; y < 16; y++)
             {
                 Ident();
-                for (var y = 0; y < 16; y++)
+                for (var x = 0; x < 16; x++)
                 {
                     if (Player0.X == x && Player0.Y == y)
                     {
@@ -78,14 +80,14 @@ namespace Arenaii.AIGames.LightRiders
                                 break;
                         }
                     }
-                    if (y % 4 == 3 && y != 15)
+                    if (x % 4 == 3 && x != 15)
                     {
                         Console.Write('|');
                     }
                 }
                 Console.WriteLine();
 
-                if (x % 4 == 3 && x != 15)
+                if (y % 4 == 3 && y != 15)
 
                 {
                     Ident(); Console.WriteLine("----o----o----o----");
@@ -171,12 +173,12 @@ namespace Arenaii.AIGames.LightRiders
             var chars = new char[256];
             var index = 0;
 
-            for (var x = 0; x < 16; x++)
+            for (var y = 0; y < 16; y++)
             {
-                for (var y = 0; y < 16; y++)
+                for (var x = 0; x < 16; x++)
                 {
-                    if (Player0.X == x && Player0.Y == y) { chars[index++] = '0'; }
-                    else if (Player1.X == x && Player1.Y == y) { chars[index++] = '1'; }
+                    if (Player0.Y == y && Player0.X == x) { chars[index++] = '0'; }
+                    else if (Player1.Y == y && Player1.X == x) { chars[index++] = '1'; }
                     else if (Fields[x, y] == FieldType.Empty) { chars[index++] = '.'; }
                     else { chars[index++] = 'x'; }
                 }
@@ -214,10 +216,10 @@ namespace Arenaii.AIGames.LightRiders
         {
             switch (move)
             {
-                case LightRiders.Move.up: /*   */ return new Point(p.X - 1, p.Y + 0);
-                case LightRiders.Move.right: /**/ return new Point(p.X + 0, p.Y + 1);
-                case LightRiders.Move.down: /* */ return new Point(p.X + 1, p.Y + 0);
-                case LightRiders.Move.left: /* */ return new Point(p.X + 0, p.Y - 1);
+                case LightRiders.Move.up: /*   */ return new Point(p.X + 0, p.Y - 1);
+                case LightRiders.Move.right: /**/ return new Point(p.X + 1, p.Y + 0);
+                case LightRiders.Move.down: /* */ return new Point(p.X + 0, p.Y + 1);
+                case LightRiders.Move.left: /* */ return new Point(p.X - 1, p.Y + 0);
                 default: return p;
             }
         }
