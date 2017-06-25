@@ -10,16 +10,16 @@ namespace Arenaii.AIGames.LightRiders
     {
         private readonly FieldType[,] Fields = new FieldType[16, 16];
 
-		public Board()
-		{
-			SetPlayer0(new Point(3, 7));
-			SetPlayer1(new Point(12, 7));
-		}
-
-		public Board(IGenerator random)
+        public Board()
         {
-			int x = random.Next(6) + 1;
-			int y = random.Next(14) + 1;
+            SetPlayer0(new Point(3, 7));
+            SetPlayer1(new Point(12, 7));
+        }
+
+        public Board(IGenerator random)
+        {
+            int x = random.Next(6) + 1;
+            int y = random.Next(14) + 1;
             SetPlayer0(new Point(x, y));
             SetPlayer1(new Point(15 - x, y));
         }
