@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using Troschuetz.Random;
 
 namespace Arenaii.AIGames.LightRiders
 {
@@ -15,7 +16,7 @@ namespace Arenaii.AIGames.LightRiders
 			SetPlayer1(new Point(12, 7));
 		}
 
-		public Board(Random random)
+		public Board(IGenerator random)
         {
 			int x = random.Next(6) + 1;
 			int y = random.Next(14) + 1;

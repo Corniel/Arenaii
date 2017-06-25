@@ -29,7 +29,7 @@ namespace Arenaii.AIGames.LightRiders
                     bot0.Write("settings your_bot player0\r\nsettings your_botid 0\r\n");
                     bot1.Write("settings your_bot player1\r\nsettings your_botid 1\r\n");
 
-                    var board = new Board(random);
+                    var board = new Board(Rnd);
 
                     var time0 = timeMax;
                     var time1 = timeMax;
