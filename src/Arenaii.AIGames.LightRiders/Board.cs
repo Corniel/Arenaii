@@ -9,7 +9,13 @@ namespace Arenaii.AIGames.LightRiders
     {
         private readonly FieldType[,] Fields = new FieldType[16, 16];
 
-        public Board(Random random)
+		public Board()
+		{
+			SetPlayer0(new Point(3, 7));
+			SetPlayer1(new Point(12, 7));
+		}
+
+		public Board(Random random)
         {
 			int x = random.Next(6) + 1;
 			int y = random.Next(14) + 1;
@@ -22,9 +28,9 @@ namespace Arenaii.AIGames.LightRiders
             get
             {
                 var round = 0;
-                for (var x = 0; x < 16; x++)
+                for (var y = 0; y < 16; y++)
                 {
-                    for (var y = 0; y < 16; y++)
+                    for (var x = 0; x < 16; x++)
                     {
                         if (Fields[x, y] > FieldType.Empty) { round++; }
                     }
@@ -38,9 +44,9 @@ namespace Arenaii.AIGames.LightRiders
             get
             {
                 var score = 0;
-                for (var x = 0; x < 16; x++)
+                for (var y = 0; y < 16; y++)
                 {
-                    for (var y = 0; y < 16; y++)
+                    for (var x = 0; x < 16; x++)
                     {
                         if /**/ (Fields[x, y].IsRed()) { score++; }
                         else if (Fields[x, y].IsGreen()) { score--; }
@@ -78,10 +84,10 @@ namespace Arenaii.AIGames.LightRiders
             Console.WriteLine();
             Ident(); ColorMarker(ConsoleColor.White, "o----------------o");
             Console.WriteLine();
-            for (var x = 0; x < 16; x++)
+            for (var y = 0; y < 16; y++)
             {
                 Ident(); ColorMarker(ConsoleColor.White, "|");
-                for (var y = 0; y < 16; y++)
+                for (var x = 0; x < 16; x++)
                 {
                     if (Player0.X == x && Player0.Y == y)
                     {
@@ -229,9 +235,9 @@ namespace Arenaii.AIGames.LightRiders
 
         private void MarkEmptyFieldsAsUnreachable()
         {
-            for (var x = 0; x < 16; x++)
+            for (var y = 0; y < 16; y++)
             {
-                for (var y = 0; y < 16; y++)
+                for (var x = 0; x < 16; x++)
                 {
                     if (Fields[x, y] <= FieldType.Empty) { Fields[x, y] = FieldType.Unreachable; }
                 }
@@ -261,9 +267,9 @@ namespace Arenaii.AIGames.LightRiders
             var chars = new char[256];
             var index = 0;
 
-            for (var x = 0; x < 16; x++)
+            for (var y = 0; y < 16; y++)
             {
-                for (var y = 0; y < 16; y++)
+                for (var x = 0; x < 16; x++)
                 {
                     if (Player0.X == x && Player0.Y == y) { chars[index++] = '0'; }
                     else if (Player1.X == x && Player1.Y == y) { chars[index++] = '1'; }

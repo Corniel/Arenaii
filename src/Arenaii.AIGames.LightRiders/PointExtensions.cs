@@ -9,10 +9,10 @@ namespace Arenaii.AIGames.LightRiders
         {
             switch (move)
             {
-                case LightRiders.Move.up: /*   */ return new Point(p.X - 1, p.Y + 0);
-                case LightRiders.Move.right: /**/ return new Point(p.X + 0, p.Y + 1);
-                case LightRiders.Move.down: /* */ return new Point(p.X + 1, p.Y + 0);
-                case LightRiders.Move.left: /* */ return new Point(p.X + 0, p.Y - 1);
+                case LightRiders.Move.up: /*   */ return new Point(p.X + 0, p.Y - 1);
+                case LightRiders.Move.right: /**/ return new Point(p.X + 1, p.Y + 0);
+                case LightRiders.Move.down: /* */ return new Point(p.X + 0, p.Y + 1);
+                case LightRiders.Move.left: /* */ return new Point(p.X - 1, p.Y + 0);
                 default: return p;
             }
         }
@@ -27,8 +27,8 @@ namespace Arenaii.AIGames.LightRiders
         public static IEnumerable<Point> GetNeighbors(this Point p)
         {
             var l = new Point(p.X - 1, p.Y + 0);
-            var r = new Point(p.X + 0, p.Y + 1);
-            var d = new Point(p.X + 1, p.Y + 0);
+            var r = new Point(p.X + 1, p.Y + 0);
+            var d = new Point(p.X + 0, p.Y + 1);
             var u = new Point(p.X + 0, p.Y - 1);
 
             if (l.IsOnBoard()) { yield return l; }
