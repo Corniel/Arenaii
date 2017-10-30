@@ -232,7 +232,7 @@ $RECYCLE.BIN/
 *.jmconfig
 
 # Custom
-/src/.vs
+/.vs
 /analytics
 /deploy
 /games
