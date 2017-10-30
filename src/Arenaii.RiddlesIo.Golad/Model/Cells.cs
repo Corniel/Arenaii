@@ -142,11 +142,11 @@ namespace Arenaii.RiddlesIo.Golad.Model
 
                 if (split.Length == 2 &&
                     int.TryParse(split[0], out int row) &&
-                    row >= 1 && row <= Height &&
+                    row >= 0 && row < Height &&
                     int.TryParse(split[1], out int col) &&
-                    col >= 1 && col <= Width)
+                    col >= 0 && col < Width)
                 {
-                    return Apply(Move.Kill(this[row - 1, col - 1]));
+                    return Apply(Move.Kill(this[row, col]));
                 }
                 return false;
             }
@@ -166,24 +166,24 @@ namespace Arenaii.RiddlesIo.Golad.Model
                         mother.Length == 2 &&
 
                         int.TryParse(child[0], out int child_row) &&
-                        child_row >= 1 && child_row <= Height &&
+                        child_row >= 0 && child_row < Height &&
                         int.TryParse(child[1], out int child_col) &&
-                        child_col >= 1 && child_col <= Width &&
+                        child_col >= 0 && child_col < Width &&
 
                         int.TryParse(father[0], out int father_row) &&
-                        father_row >= 1 && father_row <= Height &&
+                        father_row >= 0 && father_row < Height &&
                         int.TryParse(father[1], out int father_col) &&
-                        father_col >= 1 && father_col <= Width &&
+                        father_col >= 0 && father_col < Width &&
 
                         int.TryParse(mother[0], out int mother_row) &&
-                        mother_row >= 1 && mother_row <= Height &&
+                        mother_row >= 0 && mother_row < Height &&
                         int.TryParse(mother[1], out int mother_col) &&
-                        mother_col >= 1 && mother_col <= Width)
+                        mother_col >= 0 && mother_col < Width)
                     {
                         return Apply(Move.Birth(
-                            this[child_row - 1, child_col - 1].Index,
-                            this[father_row - 1, father_col - 1].Index,
-                            this[mother_row - 1, mother_col - 1].Index));
+                            this[child_row, child_col].Index,
+                            this[father_row, father_col].Index,
+                            this[mother_row, mother_col].Index));
                     }
                 }
             }
