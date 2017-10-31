@@ -39,6 +39,6 @@ namespace Arenaii.RiddlesIo.Golad.Moves
             return true;
         }
 
-        public override string ToString() => $"Birth {Child.Row},{Child.Col} {Father.Row},{Father.Col} {Mother.Row},{Mother.Col}";
+        public override string ToString() => $"Birth {Child.X},{Child.Y} {Father.X},{Father.Y} {Mother.X},{Mother.Y}";
     }
 }

@@ -23,12 +23,12 @@ namespace Arenaii.RiddlesIo.Golad.Moves
                 var split = str.Substring(5).Split(',');
 
                 if (split.Length == 2 &&
-                    int.TryParse(split[0], out int row) &&
-                    row >= 0 && row < cells.Height &&
-                    int.TryParse(split[1], out int col) &&
-                    col >= 0 && col < cells.Width)
+                    int.TryParse(split[0], out int x) &&
+                    x >= 0 && x < cells.Width &&
+                    int.TryParse(split[1], out int y) &&
+                    y >= 0 && y < cells.Height)
                 {
-                    var cell = cells[row, col];
+                    var cell = cells[x, y];
                     return new KillMove(cell);
                 }
             }
@@ -47,26 +47,26 @@ namespace Arenaii.RiddlesIo.Golad.Moves
                         father.Length == 2 &&
                         mother.Length == 2 &&
 
-                        int.TryParse(child[0], out int child_row) &&
-                        child_row >= 0 && child_row < cells.Height &&
-                        int.TryParse(child[1], out int child_col) &&
-                        child_col >= 0 && child_col < cells.Width &&
+                        int.TryParse(child[0], out int child_x) &&
+                        child_x >= 0 && child_x < cells.Width &&
+                        int.TryParse(child[1], out int child_y) &&
+                        child_y >= 0 && child_y < cells.Height &&
 
-                        int.TryParse(father[0], out int father_row) &&
-                        father_row >= 0 && father_row < cells.Height &&
-                        int.TryParse(father[1], out int father_col) &&
-                        father_col >= 0 && father_col < cells.Width &&
+                        int.TryParse(father[0], out int father_x) &&
+                        father_x >= 0 && father_x < cells.Width &&
+                        int.TryParse(father[1], out int father_y) &&
+                        father_y >= 0 && father_y < cells.Height &&
 
-                        int.TryParse(mother[0], out int mother_row) &&
-                        mother_row >= 0 && mother_row < cells.Height &&
-                        int.TryParse(mother[1], out int mother_col) &&
-                        mother_col >= 0 && mother_col < cells.Width)
+                        int.TryParse(mother[0], out int mother_x) &&
+                        mother_x >= 0 && mother_x < cells.Width &&
+                        int.TryParse(mother[1], out int mother_y) &&
+                        mother_y >= 0 && mother_y < cells.Height)
                     {
                         return new BirthMove
                         (
-                            cells[child_row, child_col],
-                            cells[father_row, father_col],
-                            cells[mother_row, mother_col]
+                            cells[child_x, child_y],
+                            cells[father_x, father_y],
+                            cells[mother_x, mother_y]
                         );
                     }
                 }

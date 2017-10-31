@@ -11,36 +11,36 @@ namespace Arenaii.RiddlesIo.Golad.Model
 {
     public class Cells : IEnumerable<Cell>
     {
-        public Cells(int height, int width)
+        public Cells(int width, int height)
         {
             Size = height * width;
             Height = height;
             Width = width;
             cells = new Cell[Size];
-            matrix = new Cell[height, width];
+            matrix = new Cell[width, height];
             State = new byte[Size];
 
-            InitializeCells(height, width);
-            InitializeNeighbors(height, width);
+            InitializeCells();
+            InitializeNeighbors();
         }
 
         public Cell this[int index] => cells[index];
 
-        public Cell this[int row, int col] => matrix[row, col];
+        public Cell this[int x, int y] => matrix[x, y];
 
-        private void InitializeCells(int rows, int cols)
+        private void InitializeCells()
         {
             var index = 0;
-            for (var row = 0; row < rows; row++)
+            for (var x = 0; x < Width; x++)
             {
-                for (var col = 0; col < cols; col++)
+                for (var y = 0; y < Height; y++)
                 {
                     var neighbors = 8;
-                    if (row == 0 || row == rows - 1)
+                    if (x == 0 || x == Width - 1)
                     {
                         neighbors -= 3;
                     }
-                    if (col == 0 || col == cols - 1)
+                    if (y == 0 || y == Height - 1)
                     {
                         neighbors -= 3;
                     }
@@ -48,37 +48,36 @@ namespace Arenaii.RiddlesIo.Golad.Model
                     {
                         neighbors = 3;
                     }
-                    var cell = new Cell(this, index, row, col, neighbors);
+                    var cell = new Cell(this, index, x, y, neighbors);
                     cells[index++] = cell;
-                    matrix[row, col] = cell;
+                    matrix[x, y] = cell;
                 }
             }
         }
 
-        private void InitializeNeighbors(int rows, int cols)
+        private void InitializeNeighbors()
         {
-            var index = 0;
-            for (var row = 0; row < rows; row++)
+            for (var x = 0; x < Width; x++)
             {
-                for (var col = 0; col < cols; col++)
+                for (var y = 0; y < Height; y++)
                 {
-                    var cell = cells[index++];
+                    var cell = matrix[x, y];
 
-                    var rMin = Math.Max(0, row - 1);
-                    var rMax = Math.Min(rows - 1, row + 1);
-                    var cMin = Math.Max(0, col - 1);
-                    var cMax = Math.Min(cols - 1, col + 1);
+                    var xMin = Math.Max(0, x - 1);
+                    var xMax = Math.Min(Width - 1, x + 1);
+                    var yMin = Math.Max(0, y - 1);
+                    var yMax = Math.Min(Height - 1, y + 1);
 
                     var i = 0;
-                    for (var r = rMin; r <= rMax; r++)
+                    for (var x_ = xMin; x_ <= xMax; x_++)
                     {
-                        for (var c = cMin; c <= cMax; c++)
+                        for (var y_ = yMin; y_ <= yMax; y_++)
                         {
-                            if (r == cell.Row && c == cell.Col)
+                            if (x_ == cell.X && y_ == cell.Y)
                             {
                                 continue;
                             }
-                            cell.Neighbors[i++] = this[r, c];
+                            cell.Neighbors[i++] = this[x_, y_];
                         }
                     }
                 }
@@ -120,7 +119,7 @@ namespace Arenaii.RiddlesIo.Golad.Model
 
         public bool Apply(IMove move)
         {
-            if(move.Apply(this))
+            if (move.Apply(this))
             {
                 Ply++;
                 Process();
@@ -154,11 +153,15 @@ namespace Arenaii.RiddlesIo.Golad.Model
         {
             var sb = new StringBuilder(Size * 2);
 
-            for (var row = 0; row < Height; row++)
+            for (var y = 0; y < Height; y++)
             {
-                for (var col = 0; col < Width; col++)
+                for (var x = 0; x < Width; x++)
                 {
-                    var cell = this[row, col];
+                    if (x != 0 && y != 0)
+                    {
+                        sb.Append(',');
+                    }
+                    var cell = this[x, y];
 
                     if (cell.IsDead)
                     {
@@ -168,14 +171,6 @@ namespace Arenaii.RiddlesIo.Golad.Model
                     {
                         sb.Append(cell.Owner - 1);
                     }
-                    if (col != Width - 1)
-                    {
-                        sb.Append(',');
-                    }
-                }
-                if (row != Height - 1)
-                {
-                    sb.Append(';');
                 }
             }
             return sb.ToString();
@@ -183,11 +178,11 @@ namespace Arenaii.RiddlesIo.Golad.Model
 
         public void ToConsole()
         {
-            for (var row = 0; row < Height; row++)
+            for (var y = 0; y < Height; y++)
             {
-                for (var col = 0; col < Width; col++)
+                for (var x = 0; x < Width; x++)
                 {
-                    var owner = this[row, col].Owner;
+                    var owner = this[x, y].Owner;
                     if (owner == Player.None)
                     {
                         Console.BackgroundColor = ConsoleColor.White;
@@ -237,7 +232,7 @@ namespace Arenaii.RiddlesIo.Golad.Model
 
         public static Cells Generate(GoladSettings settings, IGenerator rnd)
         {
-            var universe = new Cells(settings.Height, settings.Width);
+            var universe = new Cells(settings.Width, settings.Height);
 
             var todo = settings.InitialPlayerCount;
             while (todo > 0)
@@ -247,7 +242,7 @@ namespace Arenaii.RiddlesIo.Golad.Model
                 if (cell.IsDead)
                 {
                     universe.State[index] = Player.Player0;
-                    var other = universe[cell.Row, settings.Width - cell.Col - 1];
+                    var other = universe[settings.Width - cell.X - 1, settings.Height - cell.Y - 1];
                     universe.State[other.Index] = Player.Player1;
                     todo--;
                 }

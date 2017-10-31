@@ -2,18 +2,18 @@
 {
     public class Cell
     {
-        internal Cell(Cells universe, int index, int row, int col, int neighbors)
+        internal Cell(Cells universe, int index, int x, int y, int neighbors)
         {
             Index = index;
-            Row = row;
-            Col = col;
+            X = x;
+            Y = y;
             Neighbors = new Cell[neighbors];
             Count = neighbors;
             Cells = universe;
         }
         public int Index { get; }
-        public int Row { get; }
-        public int Col { get; }
+        public int X { get; }
+        public int Y { get; }
         public Cell[] Neighbors { get; }
         public int Count { get; }
         private Cells Cells { get; }
@@ -26,7 +26,7 @@
         /// <summary>Kills the owner (if any) of the cell.</summary>
         public void Kill() => Cells.State[Index] = Player.None;
 
-        public override string ToString() => $"[{Row}, {Col}]" + (IsAlive ? $"Player{Owner - 1}" : "");
+        public override string ToString() => $"[{X}, {Y}]" + (IsAlive ? $"Player{Owner - 1}" : "");
 
         /// <summary>Returns true if the cell will be alive next state, otherwise false.</summary>
         /// <remarks>

@@ -17,6 +17,6 @@ namespace Arenaii.RiddlesIo.Golad.Moves
             return true;
         }
 
-        public override string ToString() => $"Kill {Cell.Row}, {Cell.Col}";
+        public override string ToString() => $"Kill {Cell.X}, {Cell.Y}";
     }
 }
