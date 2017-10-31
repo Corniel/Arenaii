@@ -16,7 +16,7 @@ namespace Arenaii.RiddlesIo.Golad.Model
             Size = height * width;
             Height = height;
             Width = width;
-            cells = new Cell[Size];
+            collection = new Cell[Size];
             matrix = new Cell[width, height];
             State = new byte[Size];
 
@@ -24,16 +24,16 @@ namespace Arenaii.RiddlesIo.Golad.Model
             InitializeNeighbors();
         }
 
-        public Cell this[int index] => cells[index];
+        public Cell this[int index] => collection[index];
 
         public Cell this[int x, int y] => matrix[x, y];
 
         private void InitializeCells()
         {
             var index = 0;
-            for (var x = 0; x < Width; x++)
+            for (var y = 0; y < Height; y++)
             {
-                for (var y = 0; y < Height; y++)
+                for (var x = 0; x < Width; x++)
                 {
                     var neighbors = 8;
                     if (x == 0 || x == Width - 1)
@@ -49,7 +49,7 @@ namespace Arenaii.RiddlesIo.Golad.Model
                         neighbors = 3;
                     }
                     var cell = new Cell(this, index, x, y, neighbors);
-                    cells[index++] = cell;
+                    collection[index++] = cell;
                     matrix[x, y] = cell;
                 }
             }
@@ -112,7 +112,7 @@ namespace Arenaii.RiddlesIo.Golad.Model
 
         internal byte[] State { get; }
 
-        private readonly Cell[] cells;
+        private readonly Cell[] collection;
         private readonly Cell[,] matrix;
 
         public bool Alive => State.Any(state => state != Player.None);
@@ -133,7 +133,7 @@ namespace Arenaii.RiddlesIo.Golad.Model
         {
             for (var index = 0; index < Size; index++)
             {
-                buffer[index] = cells[index].Next;
+                buffer[index] = collection[index].Next;
             }
             SetState(buffer);
         }
@@ -149,32 +149,7 @@ namespace Arenaii.RiddlesIo.Golad.Model
             Buffer.BlockCopy(state, 0, State, 0, State.Length);
         }
 
-        public override string ToString()
-        {
-            var sb = new StringBuilder(Size * 2);
-
-            for (var y = 0; y < Height; y++)
-            {
-                for (var x = 0; x < Width; x++)
-                {
-                    if (x != 0 && y != 0)
-                    {
-                        sb.Append(',');
-                    }
-                    var cell = this[x, y];
-
-                    if (cell.IsDead)
-                    {
-                        sb.Append('.');
-                    }
-                    else
-                    {
-                        sb.Append(cell.Current - 1);
-                    }
-                }
-            }
-            return sb.ToString();
-        }
+        public override string ToString() => string.Join(",", this.Select(cell => ".01"[cell.Current]));
 
         public void ToConsole()
         {
@@ -252,29 +227,47 @@ namespace Arenaii.RiddlesIo.Golad.Model
 
         #region IEnumerator
 
-        public IEnumerator<Cell> GetEnumerator() => ((ICollection<Cell>)cells).GetEnumerator();
+        public IEnumerator<Cell> GetEnumerator() => ((ICollection<Cell>)collection).GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         #endregion
 
+        /// <summary>Generates a random starting position.</summary>
         public static Cells Generate(GoladSettings settings, IGenerator rnd)
         {
-            var universe = new Cells(settings.Width, settings.Height);
+            var cells = new Cells(settings.Width, settings.Height);
 
             var todo = settings.InitialPlayerCount;
             while (todo > 0)
             {
-                var index = rnd.Next(universe.Size);
-                var cell = universe[index];
+                var index = rnd.Next(cells.Size);
+                var cell = cells[index];
                 if (cell.IsDead)
                 {
-                    universe.State[index] = Player.Player0;
-                    var other = universe[settings.Width - cell.X - 1, settings.Height - cell.Y - 1];
-                    universe.State[other.Index] = Player.Player1;
+                    cells.State[index] = Player.Player0;
+                    var other = cells[settings.Width - cell.X - 1, settings.Height - cell.Y - 1];
+                    cells.State[other.Index] = Player.Player1;
                     todo--;
                 }
             }
-            return universe;
+            return cells;
+        }
+
+        /// <summary>Parses a position.</summary>
+        public static Cells Parse(GoladSettings settings, string str)
+        {
+            var cells = new Cells(settings.Width, settings.Height);
+
+            var index = 0;
+            foreach(var ch in str)
+            {
+                var value = ".01".IndexOf(ch);
+                if(value != -1)
+                {
+                    cells.State[index++] = (byte)value;
+                }
+            }
+            return cells;
         }
     }
 }
