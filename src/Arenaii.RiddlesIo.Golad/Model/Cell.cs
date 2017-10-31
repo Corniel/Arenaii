@@ -19,14 +19,14 @@
         private Cells Cells { get; }
 
         /// <summary>Gets the current owner of the cell.</summary>
-        public byte Owner => Cells.State[Index];
-        public bool IsAlive => Owner != Player.None;
-        public bool IsDead => Owner == Player.None;
+        public byte Current => Cells.State[Index];
+        public bool IsAlive => Current != Player.None;
+        public bool IsDead => Current == Player.None;
 
         /// <summary>Kills the owner (if any) of the cell.</summary>
         public void Kill() => Cells.State[Index] = Player.None;
 
-        public override string ToString() => $"[{X}, {Y}]" + (IsAlive ? $"Player{Owner - 1}" : "");
+        public override string ToString() => $"[{X}, {Y}]" + (IsAlive ? $"Player{Current - 1}" : "");
 
         /// <summary>Returns true if the cell will be alive next state, otherwise false.</summary>
         /// <remarks>
@@ -53,7 +53,7 @@
                         }
                     }
                     // not underpopulated.
-                    return alive > 1 ? Owner : Player.None;
+                    return alive > 1 ? Current : Player.None;
                 }
                 else
                 {
@@ -61,7 +61,7 @@
                     var p2 = 0;
                     for (var index = 0; index != Count; index++)
                     {
-                        var owner = Neighbors[index].Owner;
+                        var owner = Neighbors[index].Current;
                         if (owner == Player.Player0)
                         {
                             // too many neighbors to reproduce.

@@ -169,7 +169,7 @@ namespace Arenaii.RiddlesIo.Golad.Model
                     }
                     else
                     {
-                        sb.Append(cell.Owner - 1);
+                        sb.Append(cell.Current - 1);
                     }
                 }
             }
@@ -182,20 +182,16 @@ namespace Arenaii.RiddlesIo.Golad.Model
             {
                 for (var x = 0; x < Width; x++)
                 {
-                    var owner = this[x, y].Owner;
-                    if (owner == Player.None)
+                    var cell = this[x, y];
+
+                    if (cell.Current == cell.Next)
                     {
-                        Console.BackgroundColor = ConsoleColor.White;
+                        ToStableConsoleState(cell.Current);
                     }
-                    else if (owner == Player.Player0)
+                    else
                     {
-                        Console.BackgroundColor = ConsoleColor.Red;
+                        ToUnstableConsolState(cell);
                     }
-                    else if (owner == Player.Player1)
-                    {
-                        Console.BackgroundColor = ConsoleColor.Blue;
-                    }
-                    Console.Write("  ");
                 }
                 Console.WriteLine();
             }
@@ -211,6 +207,37 @@ namespace Arenaii.RiddlesIo.Golad.Model
             Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.Gray;
+        }
+
+        private static void ToStableConsoleState(byte owner)
+        {
+            if (owner == Player.None)
+            {
+                Console.BackgroundColor = ConsoleColor.White;
+            }
+            else if (owner == Player.Player0)
+            {
+                Console.BackgroundColor = ConsoleColor.Red;
+            }
+            else if (owner == Player.Player1)
+            {
+                Console.BackgroundColor = ConsoleColor.Blue;
+            }
+            Console.Write("  ");
+        }
+        private static void ToUnstableConsolState(Cell cell)
+        {
+            Console.BackgroundColor = ConsoleColor.White;
+            var owner = cell.IsAlive ? cell.Current : cell.Next;
+            Console.ForegroundColor = owner == Player.Player0 ? ConsoleColor.Red : ConsoleColor.Blue;
+            if (cell.IsAlive)
+            {
+                Console.Write("##");
+            }
+            else
+            {
+                Console.Write("..");
+            }
         }
 
         public string GetGameUpdate()

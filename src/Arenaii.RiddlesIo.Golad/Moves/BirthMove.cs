@@ -29,7 +29,7 @@ namespace Arenaii.RiddlesIo.Golad.Moves
             var player = cells.P0ToMove ? Player.Player0 : Player.Player1;
 
             // Wrong owner (of not even alive).
-            if (Mother.Owner != player || Father.Owner != player)
+            if (Mother.Current != player || Father.Current != player)
             {
                 return false;
             }
