@@ -3,6 +3,7 @@ using Arenaii.Data;
 using Arenaii.Platform;
 using Arenaii.RiddlesIo.Golad.Data;
 using Arenaii.RiddlesIo.Golad.Model;
+using Arenaii.RiddlesIo.Golad.Moves;
 using System;
 using System.Text;
 
@@ -57,7 +58,7 @@ namespace Arenaii.RiddlesIo.Golad
                         Console.WriteLine(@"{0:ss\:ff} {1:0000} {2}", bot0.Elapsed, bot0.Bot.Elo, bot0.Bot.FullName);
                         Console.WriteLine(@"{0:ss\:ff} {1:0000} {2}", bot1.Elapsed, bot1.Bot.Elo, bot1.Bot.FullName);
 
-                        if (bot.TimedOut || !cells.Apply(move))
+                        if (bot.TimedOut || !cells.Apply(Move.Parse(move, cells)))
                         {
                             state = p0ToMove ? Player.Player1 : Player.Player0;
                         }

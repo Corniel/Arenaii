@@ -9,22 +9,24 @@
             Col = col;
             Neighbors = new Cell[neighbors];
             Count = neighbors;
-            Universe = universe;
+            Cells = universe;
         }
         public int Index { get; }
         public int Row { get; }
         public int Col { get; }
         public Cell[] Neighbors { get; }
         public int Count { get; }
-        private Cells Universe { get; }
+        private Cells Cells { get; }
 
         /// <summary>Gets the current owner of the cell.</summary>
-        public byte Owner => Universe.State[Index];
+        public byte Owner => Cells.State[Index];
         public bool IsAlive => Owner != Player.None;
         public bool IsDead => Owner == Player.None;
 
         /// <summary>Kills the owner (if any) of the cell.</summary>
-        public void Kill() => Universe.State[Index] = Player.None;
+        public void Kill() => Cells.State[Index] = Player.None;
+
+        public override string ToString() => $"[{Row}, {Col}]" + (IsAlive ? $"Player{Owner - 1}" : "");
 
         /// <summary>Returns true if the cell will be alive next state, otherwise false.</summary>
         /// <remarks>

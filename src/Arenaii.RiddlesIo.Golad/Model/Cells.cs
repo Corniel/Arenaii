@@ -1,4 +1,5 @@
 ﻿using Arenaii.RiddlesIo.Golad.Data;
+using Arenaii.RiddlesIo.Golad.Moves;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Arenaii.RiddlesIo.Golad.Model
             Height = height;
             Width = width;
             cells = new Cell[Size];
+            matrix = new Cell[height, width];
             State = new byte[Size];
 
             InitializeCells(height, width);
@@ -24,10 +26,7 @@ namespace Arenaii.RiddlesIo.Golad.Model
 
         public Cell this[int index] => cells[index];
 
-        public Cell this[int row, int col]
-        {
-            get => cells[row * Width + col];
-        }
+        public Cell this[int row, int col] => matrix[row, col];
 
         private void InitializeCells(int rows, int cols)
         {
@@ -49,7 +48,9 @@ namespace Arenaii.RiddlesIo.Golad.Model
                     {
                         neighbors = 3;
                     }
-                    cells[index] = new Cell(this, index++, row, col, neighbors);
+                    var cell = new Cell(this, index, row, col, neighbors);
+                    cells[index++] = cell;
+                    matrix[row, col] = cell;
                 }
             }
         }
@@ -84,7 +85,6 @@ namespace Arenaii.RiddlesIo.Golad.Model
             }
         }
 
-
         public int Size { get; }
         public int Height { get; }
         public int Width { get; }
@@ -111,122 +111,22 @@ namespace Arenaii.RiddlesIo.Golad.Model
 
         public bool P0ToMove => (Ply % 2) == 0;
 
-        private Cell[] cells { get; }
         internal byte[] State { get; }
+
+        private readonly Cell[] cells;
+        private readonly Cell[,] matrix;
 
         public bool Alive => State.Any(state => state != Player.None);
 
-        public void Kill(Cell cell) => State[cell.Index] = Player.None;
-
-        public void Birth(byte player, Cell child, Cell father, Cell mother)
+        public bool Apply(IMove move)
         {
-            State[father.Index] = Player.None;
-            State[mother.Index] = Player.None;
-            State[child.Index] = player;
-        }
-
-        public bool Apply(string move)
-        {
-            if (string.IsNullOrEmpty(move))
+            if(move.Apply(this))
             {
-                return false;
+                Ply++;
+                Process();
+                return true;
             }
-            if (move == "pass")
-            {
-                return Apply(Move.Pass);
-            }
-
-            if (move.StartsWith("kill "))
-            {
-                var split = move.Substring(5).Split(',');
-
-                if (split.Length == 2 &&
-                    int.TryParse(split[0], out int row) &&
-                    row >= 0 && row < Height &&
-                    int.TryParse(split[1], out int col) &&
-                    col >= 0 && col < Width)
-                {
-                    return Apply(Move.Kill(this[row, col]));
-                }
-                return false;
-            }
-
-            if (move.StartsWith("birth "))
-            {
-                var parts = move.Substring(6).Split(' ');
-
-                if (parts.Length == 3)
-                {
-                    var child = parts[0].Split(',');
-                    var father = parts[1].Split(',');
-                    var mother = parts[2].Split(',');
-
-                    if (child.Length == 2 &&
-                        father.Length == 2 &&
-                        mother.Length == 2 &&
-
-                        int.TryParse(child[0], out int child_row) &&
-                        child_row >= 0 && child_row < Height &&
-                        int.TryParse(child[1], out int child_col) &&
-                        child_col >= 0 && child_col < Width &&
-
-                        int.TryParse(father[0], out int father_row) &&
-                        father_row >= 0 && father_row < Height &&
-                        int.TryParse(father[1], out int father_col) &&
-                        father_col >= 0 && father_col < Width &&
-
-                        int.TryParse(mother[0], out int mother_row) &&
-                        mother_row >= 0 && mother_row < Height &&
-                        int.TryParse(mother[1], out int mother_col) &&
-                        mother_col >= 0 && mother_col < Width)
-                    {
-                        return Apply(Move.Birth(
-                            this[child_row, child_col].Index,
-                            this[father_row, father_col].Index,
-                            this[mother_row, mother_col].Index));
-                    }
-                }
-            }
-
             return false;
-        }
-        public bool Apply(Move move)
-        {
-            // We can't kill what is dead.
-            if (move.IsKill())
-            {
-                if (this[move.Index].IsDead)
-                {
-                    return false;
-                }
-                Kill(this[move.Index]);
-            }
-
-            if (move.IsBirth())
-            {
-                // We can't revoke a cell that is alive.
-                if (this[move.Index].IsAlive)
-                {
-                    return false;
-                }
-                // It should be two different cells that die.
-                if (move.Father == move.Mother)
-                {
-                    return false;
-                }
-                var player = P0ToMove ? Player.Player0 : Player.Player1;
-
-                // Wrong owner (of not even alive).
-                if (this[move.Mother].Owner != player || this[move.Father].Owner != player)
-                {
-                    return false;
-                }
-                Birth(player, this[move.Index], this[move.Father], this[move.Mother]);
-            }
-            Ply++;
-            Process();
-
-            return true;
         }
 
         public void Process() => Process(new byte[Size]);
@@ -306,7 +206,7 @@ namespace Arenaii.RiddlesIo.Golad.Model
             }
             Console.BackgroundColor = ConsoleColor.Black;
             Console.WriteLine();
-            Console.Write($"Round: {Round,-3}"   );
+            Console.Write($"Round: {Round,-3}");
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write(Player0);
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -328,8 +228,12 @@ namespace Arenaii.RiddlesIo.Golad.Model
             return sb.ToString();
         }
 
+        #region IEnumerator
+
         public IEnumerator<Cell> GetEnumerator() => ((ICollection<Cell>)cells).GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        #endregion
 
         public static Cells Generate(GoladSettings settings, IGenerator rnd)
         {
