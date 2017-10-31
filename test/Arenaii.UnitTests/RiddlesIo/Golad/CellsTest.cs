@@ -1,5 +1,6 @@
 ﻿using Arenaii.RiddlesIo.Golad.Data;
 using Arenaii.RiddlesIo.Golad.Model;
+using Arenaii.RiddlesIo.Golad.Moves;
 using NUnit.Framework;
 
 namespace Arenaii.UnitTests.RiddlesIo.Golad
@@ -13,6 +14,39 @@ namespace Arenaii.UnitTests.RiddlesIo.Golad
             var cells = Cells.Parse(new GoladSettings(), input);
 
             Assert.AreEqual(input, cells.ToString());
+        }
+
+        [Test]
+        public void Apply_StableState()
+        {
+            var cells = Cells.Parse(new GoladSettings{ Height = 4, Width = 4},@"
+                .11.
+                0..1
+                0..0
+                .11.");
+
+            var expected = cells.ToString();
+
+            cells.Apply(Move.Pass);
+
+            Assert.AreEqual(expected, cells.ToString());
+        }
+
+        [Test]
+        public void Apply_SomeState()
+        {
+            var input = "   .,.,.,1,.,1,.,.,.,.,.,0,.,0,1,1,.,1,.,.,1,1,.,.,.,.,.,0,1,.,1,.,.,.,0,.,0,.,.,.,1,.,0,.,1,.,0,.,.,.,.,1,.,.,.,.,1,.,0,.,1,.,0,.,0,.,0,.,.,.,1,.,0,.,.,.,1,.,1,.,0,0,.,0,.,1,.,1,.,.,.,.,0,0,.,.,.,.,.,.,.,0,1,.,.,1,.,.,.,.,.,.,.,.,.,.,0,.,.,1,.,.,1,.,.,1,.,.,.,.,.,.,1,1,0,.,.,1,1,.,1,.,1,.,.,0,.,0,.,0,0,.,.,1,0,0,.,.,.,.,.,.,0,.,.,0,.,.,0,.,.,1,.,.,.,.,.,.,.,.,.,.,0,.,.,0,1,.,.,.,.,.,.,.,1,1,.,.,.,.,0,.,0,.,1,.,1,1,.,0,.,0,.,.,.,1,.,0,.,.,.,1,.,1,.,1,.,0,.,1,.,0,.,.,.,.,0,.,.,.,.,1,.,0,.,1,.,0,.,.,.,1,.,1,.,.,.,0,.,0,1,.,.,.,.,.,0,0,.,.,0,.,0,0,1,.,1,.,.,.,.,.,0,.,0,.,.,.";
+            var expected = ".,.,1,.,1,.,.,.,.,0,0,.,.,.,1,1,.,.,.,.,.,.,.,1,.,.,.,.,.,.,.,.,.,.,0,.,.,1,.,.,1,.,.,1,1,.,0,.,1,.,.,.,.,1,0,.,.,.,0,.,.,.,0,.,0,0,.,.,.,.,.,.,.,0,0,.,1,1,.,.,.,.,.,0,.,.,.,.,.,.,.,.,0,0,.,.,.,0,.,.,.,.,1,1,.,.,1,.,.,.,.,.,.,.,0,.,.,.,1,1,.,.,.,.,1,.,.,.,.,.,0,0,1,0,0,.,1,.,1,1,1,1,.,.,.,.,0,0,0,0,.,0,.,1,1,0,1,1,.,.,.,.,.,0,.,.,.,.,0,0,.,.,.,1,.,.,.,.,.,.,0,.,.,.,0,0,.,.,.,.,1,.,.,.,1,1,.,.,0,.,.,.,.,.,1,.,.,.,.,.,0,0,.,1,1,.,.,.,.,.,.,.,1,1,.,1,.,.,.,1,.,.,.,1,1,.,.,.,.,0,.,1,.,0,0,.,.,0,.,.,0,.,.,.,.,.,.,.,.,.,.,.,.,.,0,.,.,.,.,.,.,0,0,0,.,.,.,1,1,.,.,.,.,0,.,0,.,.";
+
+            var cells = Cells.Parse(new GoladSettings(), input);
+
+            cells.Apply(Move.Pass);
+
+            var move = new BirthMove(cells[0, 13], cells[16, 0], cells[16, 4]);
+
+            Assert.IsTrue(cells.Apply(move), "This move should be able to be processed");
+
+            Assert.AreEqual(expected, cells.ToString());
         }
     }
 }
