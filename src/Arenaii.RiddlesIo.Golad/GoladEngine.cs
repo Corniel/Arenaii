@@ -46,12 +46,16 @@ namespace Arenaii.RiddlesIo.Golad
                         var bot = p0ToMove ? bot0 : bot1;
                         var time = p0ToMove ? time0 : time1;
                         var start = bot.Elapsed;
+                        var move = "";
 
-                        bot.Write(cells.GetGameUpdate());
-                        bot.Write("action move {0:0}", time.TotalMilliseconds);
-                        bot.Start();
-                        var move = bot.Read(time);
-                        bot.Stop();
+                        if (!bot.TimedOut)
+                        {
+                            bot.Write(cells.GetGameUpdate());
+                            bot.Write("action move {0:0}", time.TotalMilliseconds);
+                            bot.Start();
+                            move = bot.Read(time);
+                            bot.Stop();
+                        }
 
                         Console.Clear();
                         cells.ToConsole();
@@ -60,7 +64,7 @@ namespace Arenaii.RiddlesIo.Golad
 
                         if (bot.TimedOut || !cells.Apply(Move.Parse(move, cells)))
                         {
-                            state = p0ToMove ? Player.Player1 : Player.Player0;
+                            cells.Apply(Move.Pass);
                         }
                         else
                         {
