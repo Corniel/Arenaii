@@ -65,6 +65,7 @@ namespace Arenaii.RiddlesIo.Golad
                         if (bot.TimedOut || !cells.Apply(Move.Parse(move, cells)))
                         {
                             cells.Apply(Move.Pass);
+                            state = cells.Outcome(settings);
                         }
                         else
                         {
