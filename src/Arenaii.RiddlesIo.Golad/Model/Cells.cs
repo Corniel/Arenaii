@@ -171,6 +171,7 @@ namespace Arenaii.RiddlesIo.Golad.Model
                 Console.WriteLine();
             }
             Console.BackgroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.White;
             Console.WriteLine();
             Console.Write($"Round: {Round,-3}");
             Console.ForegroundColor = ConsoleColor.Red;
