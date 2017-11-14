@@ -12,5 +12,6 @@ namespace Arenaii.RiddlesIo.Golad.Data
         public int Width { get; set; } = 18;
         public int InitialPlayerCount { get; set; } = 50;
         public int MaximumRounds { get; set; } = 100;
+        public bool VisualizeNext { get; set; } = true;
     }
 }
