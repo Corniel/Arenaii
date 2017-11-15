@@ -7,6 +7,7 @@ namespace Arenaii.RiddlesIo.Golad.Data
         public GoladSettings()
         {
             PlayerNames = new PlayerName[] { PlayerName.player0, PlayerName.player1 };
+            TimePerMove = 100;
         }
         public int Height { get; set; } = 16;
         public int Width { get; set; } = 18;
