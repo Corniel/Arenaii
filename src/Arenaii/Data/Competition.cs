@@ -173,6 +173,11 @@ namespace Arenaii.Data
 
                 var results = GetWeightedResults().ToList();
 
+                var combined = WeightedResult.Merge(results);
+
+                writer.WriteLine($"Total: {combined}");
+                writer.WriteLine();
+
                 foreach (var bot in Bots)
                 {
                     writer.WriteLine("Opponents: {0} ({1:0})", bot.FullName, bot.Rating);
