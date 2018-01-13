@@ -240,7 +240,8 @@ namespace Arenaii.RiddlesIo.Golad.Model
             var todo = settings.InitialPlayerCount;
             while (todo > 0)
             {
-                var index = rnd.Next(cells.Size);
+                // Select one cell in the top half of the board.
+                var index = rnd.Next(cells.Size / 2);
                 var cell = cells[index];
                 if (cell.IsDead)
                 {
