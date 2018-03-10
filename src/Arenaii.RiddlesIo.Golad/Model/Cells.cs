@@ -151,7 +151,7 @@ namespace Arenaii.RiddlesIo.Golad.Model
 
         public override string ToString() => string.Join(",", this.Select(cell => ".01"[cell.Current]));
 
-        public void ToConsole()
+        public void ToConsole(bool visualizeNext)
         {
             for (var y = 0; y < Height; y++)
             {
@@ -159,7 +159,7 @@ namespace Arenaii.RiddlesIo.Golad.Model
                 {
                     var cell = this[x, y];
 
-                    if (cell.Current == cell.Next)
+                    if (cell.Current == cell.Next || !visualizeNext)
                     {
                         ToStableConsoleState(cell.Current);
                     }
@@ -241,7 +241,8 @@ namespace Arenaii.RiddlesIo.Golad.Model
             var todo = settings.InitialPlayerCount;
             while (todo > 0)
             {
-                var index = rnd.Next(cells.Size);
+                // Select one cell in the top half of the board.
+                var index = rnd.Next(cells.Size / 2);
                 var cell = cells[index];
                 if (cell.IsDead)
                 {

@@ -39,6 +39,7 @@ namespace Arenaii.RiddlesIo.Golad
                     var time0 = timeMax;
                     var time1 = timeMax;
                     var state = Player.None;
+                    var last = "";
 
                     while (state == Player.None)
                     {
@@ -57,18 +58,17 @@ namespace Arenaii.RiddlesIo.Golad
                             bot.Stop();
                         }
 
-                        Console.Clear();
-                        cells.ToConsole();
-                        Console.WriteLine(@"{0:ss\:ff} {1:0000} {2}", bot0.Elapsed, bot0.Bot.Elo, bot0.Bot.FullName);
-                        Console.WriteLine(@"{0:ss\:ff} {1:0000} {2}", bot1.Elapsed, bot1.Bot.Elo, bot1.Bot.FullName);
+                        UpdateConsole(settings, bot0, bot1, cells, last, p0ToMove);
 
                         if (bot.TimedOut || !cells.Apply(Move.Parse(move, cells)))
                         {
                             cells.Apply(Move.Pass);
                             state = cells.Outcome(settings);
+                            last = move + "*";
                         }
                         else
                         {
+                            last = move;
                             state = cells.Outcome(settings);
                             var elapsed = bot.Elapsed - start;
                             var tm = time - elapsed + TimeSpan.FromMilliseconds(settings.TimePerMove);
@@ -102,6 +102,22 @@ namespace Arenaii.RiddlesIo.Golad
                     };
                 }
             }
+        }
+
+        private static void UpdateConsole(GoladSettings settings, ConsoleBot bot0, ConsoleBot bot1, Cells cells, string last, bool p0ToMove)
+        {
+            Console.Clear();
+            cells.ToConsole(settings.VisualizeNext);
+            Console.BackgroundColor = p0ToMove ? ConsoleColor.Blue : ConsoleColor.Red;
+            Console.Write(" ");
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.Write(" ");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(last);
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine();
+            Console.WriteLine(@"{0:ss\:ff}{3} {1:0000} {2}", bot0.Elapsed, bot0.Bot.Elo, bot0.Bot.FullName, bot0.TimedOut ? "*" : " ");
+            Console.WriteLine(@"{0:ss\:ff}{3} {1:0000} {2}", bot1.Elapsed, bot1.Bot.Elo, bot1.Bot.FullName, bot1.TimedOut ? "*" : " ");
         }
     }
 }

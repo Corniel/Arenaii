@@ -9,18 +9,19 @@ namespace Arenaii.RiddlesIo.Golad.Moves
 
         public static IMove Parse(string str, Cells cells)
         {
-            if(string.IsNullOrEmpty(str))
+            var move = (str ?? "").ToUpperInvariant();
+            if(string.IsNullOrEmpty(move))
             {
                 return None;
             }
-            if(str == "pass")
+            if(move == "PASS")
             {
                 return Pass;
             }
 
-            if (str.StartsWith("kill "))
+            if (move.StartsWith("KILL "))
             {
-                var split = str.Substring(5).Split(',');
+                var split = move.Substring(5).Split(',');
 
                 if (split.Length == 2 &&
                     int.TryParse(split[0], out int x) &&
@@ -33,9 +34,9 @@ namespace Arenaii.RiddlesIo.Golad.Moves
                 }
             }
 
-            if (str.StartsWith("birth "))
+            if (move.StartsWith("BIRTH "))
             {
-                var parts = str.Substring(6).Split(' ');
+                var parts = move.Substring(6).Split(' ');
 
                 if (parts.Length == 3)
                 {
