@@ -36,26 +36,32 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=2.0.12.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\log4net.2.0.12\lib\net45\log4net.dll</HintPath>
     </Reference>
     <Reference Include="PommaLabs.Thrower, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2f204b7110a52060, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Thrower.4.3.0\lib\net461\PommaLabs.Thrower.dll</HintPath>
     </Reference>
-    <Reference Include="Qowaiv, Version=3.0.0.223, Culture=neutral, PublicKeyToken=0e6640b5f269a3fc, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Qowaiv.3.0.0.223\lib\net45\Qowaiv.dll</HintPath>
+    <Reference Include="Qowaiv, Version=5.1.1.0, Culture=neutral, PublicKeyToken=0e6640b5f269a3fc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Qowaiv.5.1.1\lib\netstandard2.0\Qowaiv.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Extensions, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Runtime.Extensions.4.3.1\lib\net462\System.Runtime.Extensions.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Troschuetz.Random, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2f204b7110a52060, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Troschuetz.Random.4.2.0\lib\net461\Troschuetz.Random.dll</HintPath>
+    <Reference Include="Troschuetz.Random, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Troschuetz.Random.5.0.1\lib\net461\Troschuetz.Random.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
