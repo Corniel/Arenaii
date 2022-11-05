@@ -1,10 +1,9 @@
-﻿namespace Arenaii.AIGames
+﻿namespace Arenaii.AIGames;
+
+public enum BoardState
 {
-	public enum BoardState
-	{
-		None = 0,
-		Player1 = 1,
-		Player2 = 2,
-		Draw = 3,
-	}
+    None = 0,
+    Player1 = 1,
+    Player2 = 2,
+    Draw = 3,
 }

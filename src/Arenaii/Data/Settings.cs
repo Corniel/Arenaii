@@ -1,17 +1,9 @@
-﻿using Qowaiv.Statistics;
-using System;
+﻿namespace Arenaii.Data;
 
-namespace Arenaii.Data
+[Serializable]
+public abstract class Settings
 {
-	[Serializable]
-	public abstract class Settings
-	{
-		public Settings()
-		{
-			AverageElo = 1600;
-		}
-		public bool IsSymetric { get; set; }
-		public Elo AverageElo { get; set; }
-		public PairingType Pairing { get; set; }
-	}
+    public bool IsSymetric { get; init; }
+    public Elo AverageElo { get; init; } = 1600;
+    public PairingType Pairing { get; init; }
 }

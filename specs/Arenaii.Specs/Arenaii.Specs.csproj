@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
+    <PackageReference Include="NUnit.Analyzers" Version="3.3.0" />
+    <PackageReference Include="coverlet.collector" Version="3.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Arenaii.AIGames.LightRiders\Arenaii.AIGames.LightRiders.csproj" />
+    <ProjectReference Include="..\..\src\Arenaii.AIGames.UltimateTicTacToe\Arenaii.AIGames.UltimateTicTacToe.csproj" />
+    <ProjectReference Include="..\..\src\Arenaii.AIGames\Arenaii.AIGames.csproj" />
+    <ProjectReference Include="..\..\src\Arenaii.Backgammon\Arenaii.Backgammon.csproj" />
+    <ProjectReference Include="..\..\src\Arenaii.RiddlesIo.Golad\Arenaii.RiddlesIo.Golad.csproj" />
+    <ProjectReference Include="..\..\src\Arenaii\Arenaii.csproj" />
+  </ItemGroup>
+
+</Project>

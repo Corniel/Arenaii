@@ -1,7 +1,5 @@
 ﻿using Arenaii.Data;
 using Qowaiv;
-using System;
-using System.Collections.Generic;
 
 namespace Arenaii
 {
@@ -16,7 +14,7 @@ namespace Arenaii
         public int Loses { get; set; }
         public int Count => Wins + Draws + Loses;
 
-        public Percentage Score => Count == 0 ? 0.5 : (Wins + 0.5 * Draws) / Count;
+        public Percentage Score => Count == 0 ? 50.Percent() : Percentage.Create((Wins + 0.5 * Draws) / Count);
 
         public override string ToString()
         {
