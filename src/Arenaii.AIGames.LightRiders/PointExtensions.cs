@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace Arenaii.AIGames.LightRiders

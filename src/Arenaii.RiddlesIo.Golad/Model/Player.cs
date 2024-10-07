@@ -1,4 +1,4 @@
-﻿namespace Arenaii.RiddlesIo.Golad.Model;
+namespace Arenaii.RiddlesIo.Golad.Model;
 
 public static class Player
 {

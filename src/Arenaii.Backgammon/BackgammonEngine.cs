@@ -1,4 +1,4 @@
-﻿using Arenaii.Backgammon.Data;
+using Arenaii.Backgammon.Data;
 using Arenaii.Data;
 using Arenaii.Platform;
 

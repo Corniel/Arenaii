@@ -1,4 +1,4 @@
-﻿using Arenaii.AIGames.Data;
+using Arenaii.AIGames.Data;
 
 namespace Arenaii.AIGames.UltimateTicTacToe.Data;
 

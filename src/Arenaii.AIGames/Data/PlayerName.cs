@@ -1,4 +1,4 @@
-﻿namespace Arenaii.AIGames.Data
+namespace Arenaii.AIGames.Data
 {
 	public enum PlayerName
 	{

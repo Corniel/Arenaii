@@ -1,4 +1,4 @@
-﻿using Arenaii.Backgammon;
+using Arenaii.Backgammon;
 using NUnit.Framework;
 using System;
 

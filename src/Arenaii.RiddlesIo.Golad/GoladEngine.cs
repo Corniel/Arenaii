@@ -1,4 +1,4 @@
-﻿using Arenaii.AIGames;
+using Arenaii.AIGames;
 using Arenaii.Data;
 using Arenaii.Platform;
 using Arenaii.RiddlesIo.Golad.Data;

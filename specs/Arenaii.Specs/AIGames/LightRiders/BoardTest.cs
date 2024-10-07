@@ -1,4 +1,4 @@
-﻿using Arenaii.AIGames.LightRiders;
+using Arenaii.AIGames.LightRiders;
 using NUnit.Framework;
 using System;
 

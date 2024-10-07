@@ -1,4 +1,4 @@
-﻿using Arenaii.Data;
+using Arenaii.Data;
 using NUnit.Framework;
 using Qowaiv.Statistics;
 using System.IO;

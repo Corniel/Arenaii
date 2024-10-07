@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Arenaii.AIGames.Data;
 
 namespace Arenaii.AIGames.FourInARow

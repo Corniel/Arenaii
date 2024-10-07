@@ -1,4 +1,4 @@
-﻿namespace Arenaii.Data
+namespace Arenaii.Data
 {
 	public enum PairingType
 	{

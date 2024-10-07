@@ -1,4 +1,4 @@
-﻿namespace Arenaii.AIGames.UltimateTicTacToe;
+namespace Arenaii.AIGames.UltimateTicTacToe;
 
 public class MetaBoard
 {

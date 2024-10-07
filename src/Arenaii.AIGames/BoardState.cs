@@ -1,4 +1,4 @@
-﻿namespace Arenaii.AIGames;
+namespace Arenaii.AIGames;
 
 public enum BoardState
 {

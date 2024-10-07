@@ -1,4 +1,4 @@
-﻿namespace Arenaii.AIGames.LightRiders
+namespace Arenaii.AIGames.LightRiders
 {
     public static class FieldTypeExtensions
     {

@@ -1,4 +1,4 @@
-﻿using Arenaii.Configuration;
+using Arenaii.Configuration;
 using System.IO;
 using System.Xml.Serialization;
 

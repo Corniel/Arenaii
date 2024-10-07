@@ -1,4 +1,4 @@
-﻿using Arenaii.RiddlesIo.Golad.Data;
+using Arenaii.RiddlesIo.Golad.Data;
 
 namespace Arenaii.RiddlesIo.Golad;
 

@@ -1,4 +1,4 @@
-﻿using Arenaii.AIGames.LightRiders.Data;
+using Arenaii.AIGames.LightRiders.Data;
 using Arenaii.Data;
 using Arenaii.Platform;
 using System;

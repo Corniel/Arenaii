@@ -1,4 +1,4 @@
-﻿using Qowaiv.Statistics;
+using Qowaiv.Statistics;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;

@@ -1,4 +1,4 @@
-﻿using Arenaii.Configuration;
+using Arenaii.Configuration;
 using Arenaii.Data;
 using System;
 using System.Diagnostics;

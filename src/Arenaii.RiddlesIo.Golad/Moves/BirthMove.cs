@@ -1,4 +1,4 @@
-﻿using Arenaii.RiddlesIo.Golad.Model;
+using Arenaii.RiddlesIo.Golad.Model;
 
 namespace Arenaii.RiddlesIo.Golad.Moves;
 

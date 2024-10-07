@@ -1,4 +1,4 @@
-﻿using Arenaii.RiddlesIo.Golad.Data;
+using Arenaii.RiddlesIo.Golad.Data;
 using Arenaii.RiddlesIo.Golad.Model;
 using Arenaii.RiddlesIo.Golad.Moves;
 using NUnit.Framework;
