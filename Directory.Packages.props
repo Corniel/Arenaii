@@ -13,8 +13,8 @@
     <PackageVersion Include="MathNet.Numerics" Version="5.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="*" />
     <PackageVersion Include="NUnit" Version="3.13.3" />
-    <PackageVersion Include="NUnit3TestAdapter" Version="*" />
     <PackageVersion Include="NUnit.Analyzers" Version="*" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="*" />
     <PackageVersion Include="Qowaiv" Version="7.0.5" />
     <PackageVersion Include="Qowaiv.Analyzers.CSharp" Version="*" />
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="*" />

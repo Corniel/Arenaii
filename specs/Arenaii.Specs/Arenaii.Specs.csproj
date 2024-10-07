@@ -2,9 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,16 +17,19 @@
 
   <ItemGroup Label="Analyzers">
     <PackageReference Include="NUnit.Analyzers" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup Label="Analyzers">
     <PackageReference Remove="Qowaiv.Analyzers.CSharp" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Arenaii.AIGames.LightRiders\Arenaii.AIGames.LightRiders.csproj" />
-    <ProjectReference Include="..\..\src\Arenaii.AIGames.UltimateTicTacToe\Arenaii.AIGames.UltimateTicTacToe.csproj" />
-    <ProjectReference Include="..\..\src\Arenaii.AIGames\Arenaii.AIGames.csproj" />
-    <ProjectReference Include="..\..\src\Arenaii.Backgammon\Arenaii.Backgammon.csproj" />
-    <ProjectReference Include="..\..\src\Arenaii.RiddlesIo.Golad\Arenaii.RiddlesIo.Golad.csproj" />
-    <ProjectReference Include="..\..\src\Arenaii\Arenaii.csproj" />
+    <ProjectReference Include="../../src/Arenaii/Arenaii.csproj" />
+    <ProjectReference Include="../../src/Arenaii.AIGames/Arenaii.AIGames.csproj" />
+    <ProjectReference Include="../../src/Arenaii.AIGames.LightRiders/Arenaii.AIGames.LightRiders.csproj" />
+    <ProjectReference Include="../../src/Arenaii.AIGames.UltimateTicTacToe/Arenaii.AIGames.UltimateTicTacToe.csproj" />
+    <ProjectReference Include="../../src/Arenaii.Backgammon/Arenaii.Backgammon.csproj" />
+    <ProjectReference Include="../../src/Arenaii.RiddlesIo.Golad/Arenaii.RiddlesIo.Golad.csproj" />
   </ItemGroup>
 
 </Project>
