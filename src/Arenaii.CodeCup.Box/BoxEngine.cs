@@ -77,8 +77,6 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
         return ver.MoveNext() || hor.MoveNext();
     }
 
-    
-
     private static class Render
     {
         public static void Board(ConsoleBot bot1, ConsoleBot bot2)
