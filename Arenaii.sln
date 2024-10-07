@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
 		LICENSE.md = LICENSE.md
 		README.md = README.md
 	EndProjectSection
@@ -24,7 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arenaii.AIGames.UltimateTic
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{47039D48-EF0D-4D60-A2E9-5C94B73E7FA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arenaii.AIGames.LightRiders", "src\Arenaii.AIGames.LightRiders\Arenaii.AIGames.LightRiders.csproj", "{CF51AC49-D68F-4096-A201-1C668A3BC0B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arenaii.AIGames.LightRiders", "src\Arenaii.AIGames.LightRiders\Arenaii.AIGames.LightRiders.csproj", "{CF51AC49-D68F-4096-A201-1C668A3BC0B8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arenaii.RiddlesIo.Golad", "src\Arenaii.RiddlesIo.Golad\Arenaii.RiddlesIo.Golad.csproj", "{E93AB3D6-237C-4515-B54A-23CFE8059123}"
 EndProject
