@@ -1,0 +1,23 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageFloatingVersionsEnabled>true</CentralPackageFloatingVersionsEnabled>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <CentralPackageVersionOverrideEnabled>false</CentralPackageVersionOverrideEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="coverlet.collector" Version="*" />
+    <PackageVersion Include="DotNetProjectFile.Analyzers" Version="*" />
+    <PackageVersion Include="FluentAssertions" Version="6.12.1" />
+    <PackageVersion Include="FluentAssertions.Analyzers" Version="0.33.0" />
+    <PackageVersion Include="MathNet.Numerics" Version="5.0.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="*" />
+    <PackageVersion Include="NUnit" Version="4.2.2" />
+    <PackageVersion Include="NUnit.Analyzers" Version="*" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="*" />
+    <PackageVersion Include="Qowaiv" Version="7.0.5" />
+    <PackageVersion Include="Qowaiv.Analyzers.CSharp" Version="*" />
+    <PackageVersion Include="SonarAnalyzer.CSharp" Version="*" />
+    <PackageVersion Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
+  </ItemGroup>
+</Project>

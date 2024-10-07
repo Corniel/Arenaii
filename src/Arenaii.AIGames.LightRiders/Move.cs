@@ -1,11 +1,10 @@
-﻿namespace Arenaii.AIGames.LightRiders
+namespace Arenaii.AIGames.LightRiders;
+
+public enum Move
 {
-    public enum Move
-    {
-        None = 0,
-        up,
-        right,
-        down,
-        left
-    }
+    None = 0,
+    up,
+    right,
+    down,
+    left
 }

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+namespace Arenaii.Backgammon;
 
-namespace Arenaii.Backgammon
-{
-	public class Board
+public class Board
 	{
 		private readonly Field[] fields;
 		public const int BarXIndex = 0;
@@ -448,4 +443,3 @@ namespace Arenaii.Backgammon
 			return sb.ToString();
 		}
 	}
-}

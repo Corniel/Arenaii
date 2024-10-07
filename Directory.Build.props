@@ -1,0 +1,23 @@
+<Project>
+
+  <PropertyGroup>
+    <OutputType>library</OutputType>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsPublishable>false</IsPublishable>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+  </PropertyGroup>
+
+  <ItemGroup Label="Analyzers">
+    <PackageReference Include="DotNetProjectFile.Analyzers" PrivateAssets="all" />
+    <PackageReference Include="Qowaiv.Analyzers.CSharp" PrivateAssets=" all" />
+    <PackageReference Include="SonarAnalyzer.CSharp"  PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="../../Directory.Build.props" Link="Properties/Directory.Build.props" />
+    <AdditionalFiles Include="../../Directory.Packages.props" Link="Properties/Directory.Packages.props" />
+    <AdditionalFiles Include="*.csproj" Visible="false" />
+  </ItemGroup>
+
+</Project>

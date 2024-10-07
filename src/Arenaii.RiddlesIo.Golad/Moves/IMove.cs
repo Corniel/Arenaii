@@ -1,9 +1,8 @@
-﻿using Arenaii.RiddlesIo.Golad.Model;
+using Arenaii.RiddlesIo.Golad.Model;
 
-namespace Arenaii.RiddlesIo.Golad.Moves
+namespace Arenaii.RiddlesIo.Golad.Moves;
+
+public interface IMove
 {
-    public interface IMove
-    {
-        bool Apply(Cells cells);
-    }
+    bool Apply(Cells cells);
 }

@@ -1,8 +1,16 @@
-[*]
-indent_style =  space
-indent_size =  4
-insert_final_newline = true
-end_of_line = crlf
+root = true
 
-[*.csproj]
-indent_size =  2
+[*]
+end_of_line = crlf
+insert_final_newline = true
+charset = utf-8
+
+# Code files
+[*.cs]
+indent_style = space
+indent_size = 4
+
+# Project files
+[*.{csproj,props}]
+indent_style = space
+indent_size = 2

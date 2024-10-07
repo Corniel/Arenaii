@@ -1,5 +1,5 @@
-﻿namespace Arenaii.AIGames.LightRiders
-{
+namespace Arenaii.AIGames.LightRiders;
+
 	public enum BoardState
 	{
 		None = 0,
@@ -7,4 +7,3 @@
 		Player2 = 2,
 		Draw = 3,
 	}
-}

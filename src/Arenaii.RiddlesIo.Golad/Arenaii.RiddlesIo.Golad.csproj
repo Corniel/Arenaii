@@ -1,20 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net462</TargetFramework>
-    <ApplicationIcon />
-    <OutputType>Exe</OutputType>
-    <StartupObject />
-    <AssemblyName>Golad</AssemblyName>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Troschuetz.Random" Version="5.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Arenaii.AIGames\Arenaii.AIGames.csproj" />
-    <ProjectReference Include="..\Arenaii\Arenaii.csproj" />
+    <ProjectReference Include="../Arenaii.AIGames/Arenaii.AIGames.csproj" />
   </ItemGroup>
 
 </Project>

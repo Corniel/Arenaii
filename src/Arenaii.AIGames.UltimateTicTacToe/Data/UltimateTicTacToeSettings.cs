@@ -1,8 +1,6 @@
-﻿using Arenaii.AIGames.Data;
-using System;
+using Arenaii.AIGames.Data;
 
-namespace Arenaii.AIGames.UltimateTicTacToe.Data
-{
-	[Serializable]
-	public class UltimateTicTacToeSettings : AIGamesSettings { }
-}
+namespace Arenaii.AIGames.UltimateTicTacToe.Data;
+
+[Serializable]
+public class UltimateTicTacToeSettings : AIGamesSettings { }

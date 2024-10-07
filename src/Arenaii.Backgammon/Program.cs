@@ -1,18 +1,14 @@
-﻿using Arenaii.Backgammon.Data;
+using Arenaii.Backgammon.Data;
 
-namespace Arenaii.Backgammon
+namespace Arenaii.Backgammon;
+
+public class Program : Simulator<BackgammonCompetition, BackgammonSettings>
 {
-	public class Program : Simulator<BackgammonCompetition, BackgammonSettings>
-	{
-		public Program()
-		{
-			Engine = new BackgammonEngine();
-		}
+    public Program() => Engine = new BackgammonEngine();
 
-		static void Main(string[] args)
-		{
-			var program = new Program();
-			program.Run(args);
-		}
-	}
+    static void Main(string[] args)
+    {
+        var program = new Program();
+        program.Run(args);
+    }
 }

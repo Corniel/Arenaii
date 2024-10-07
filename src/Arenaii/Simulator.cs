@@ -1,10 +1,8 @@
-﻿using Arenaii.Data;
-using System.Collections.Generic;
-using System.Linq;
+using Arenaii.Data;
 
-namespace Arenaii
-{
-	public abstract class Simulator<TCompetition, TSettings>
+namespace Arenaii;
+
+public abstract class Simulator<TCompetition, TSettings>
 		where TCompetition : Competition<TSettings>
 		where TSettings : Settings
 	{
@@ -37,17 +35,14 @@ namespace Arenaii
 			}
 		}
 
-		private Queue<Pairing> CreatePairings()
-		{
-			switch (Competition.Settings.Pairing)
-			{
-				case PairingType.Frequency: return CreatePairingsByFrequency();
-			}
-			return CreateRandomPairings();
+    private Queue<Pairing> CreatePairings() 
+        => Competition.Settings.Pairing switch
+        {
+            PairingType.Frequency => CreatePairingsByFrequency(),
+            _ => CreateRandomPairings(),
+        };
 
-		}
-
-		private Queue<Pairing> CreateRandomPairings()
+    private Queue<Pairing> CreateRandomPairings()
 		{
 			var queue = new Queue<Pairing>();
 			var sorted = Competition.Bots
@@ -84,4 +79,3 @@ namespace Arenaii
 			return queue;
 		}
 	}
-}

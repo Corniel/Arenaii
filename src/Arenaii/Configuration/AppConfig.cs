@@ -1,8 +1,8 @@
-﻿using System.Configuration;
+using System.Configuration;
 using System.IO;
 
-namespace Arenaii.Configuration
-{
+namespace Arenaii.Configuration;
+
 	public static class AppConfig
 	{
 		public static DirectoryInfo CompetitionDirectory
@@ -41,4 +41,3 @@ namespace Arenaii.Configuration
 
 		public static FileInfo ResultsFile { get { return new FileInfo(Path.Combine(CompetitionDirectory.FullName, "results.txt")); } }
 	}
-}

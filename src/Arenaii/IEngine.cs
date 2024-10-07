@@ -1,14 +1,12 @@
-﻿using Arenaii.Data;
-using Troschuetz.Random;
+using Arenaii.Data;
 
-namespace Arenaii
-{
-	public interface IEngine<TCompetition, TSettings>
+namespace Arenaii;
+
+public interface IEngine<TCompetition, TSettings>
 		where TCompetition : Competition<TSettings>
 		where TSettings : Settings
 	{
-		IGenerator Rnd { get; set; }
+		Random Rnd { get; set; }
 
 		Match Simulate(Pairing pairing, TCompetition competition);
 	}
-}
