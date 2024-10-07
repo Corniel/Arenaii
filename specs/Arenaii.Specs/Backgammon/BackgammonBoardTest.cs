@@ -1,5 +1,4 @@
 using Arenaii.Backgammon;
-using System;
 
 namespace Arenaii.UnitTests.Backgammon;
 
@@ -9,10 +8,7 @@ public class BackgammonBoardTest
 		public void ToString_Initial()
 		{
 			var board = new Board();
-			var act = board.ToString();
-			var exp = "{..}|X2|..|..|..|..|O5|=|..|O3|..|..|..|X5|=|O5|..|..|..|X3|..|=|X5|..|..|..|..|O2|{..} 0-0";
-
-			Console.WriteLine(act);
-			Assert.AreEqual(exp, act);
+			var str = board.ToString();
+            str.Should().Be("{..}|X2|..|..|..|..|O5|=|..|O3|..|..|..|X5|=|O5|..|..|..|X3|..|=|X5|..|..|..|..|O2|{..} 0-0");
 		}
 	}

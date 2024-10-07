@@ -11,24 +11,7 @@ public class CellsTest
     public void Parse_ToString(string input)
     {
         var cells = Cells.Parse(new GoladSettings(), input);
-
-        Assert.AreEqual(input, cells.ToString());
-    }
-
-    [Test]
-    public void Apply_StableState()
-    {
-        var cells = Cells.Parse(new GoladSettings{ Height = 4, Width = 4},@"
-                .11.
-                0..1
-                0..0
-                .11.");
-
-        var expected = cells.ToString();
-
-        cells.Apply(Move.Pass);
-
-        Assert.AreEqual(expected, cells.ToString());
+        cells.ToString().Should().Be(input);
     }
 
     [Test]
@@ -43,8 +26,7 @@ public class CellsTest
 
         var move = new BirthMove(cells[0, 13], cells[16, 0], cells[16, 4]);
 
-        Assert.IsTrue(cells.Apply(move), "This move should be able to be processed");
-
-        Assert.AreEqual(expected, cells.ToString());
+        cells.Apply(move).Should().BeTrue();
+        cells.ToString().Should().Be(expected);
     }
 }

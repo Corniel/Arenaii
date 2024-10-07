@@ -1,4 +1,5 @@
 using Arenaii.AIGames.LightRiders;
+using FluentAssertions;
 using System;
 
 namespace Arenaii.UnitTests.AIGames.LightRiders;
@@ -9,8 +10,9 @@ public class BoardTest
     public void GetFieldUpdate_Initial()
     {
         var board = new Board();
-        var act = board.GetFieldUpdate();
-        var exp = 
+        var update = board.GetFieldUpdate();
+
+        update.Should().Be(
             "update game field " +
             ".,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,"+
             ".,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,"+
@@ -30,9 +32,6 @@ public class BoardTest
             ".,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,"+
             ".,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,"+
             ".,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,"+
-            ".,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.";
-
-        Console.WriteLine(act);
-        Assert.AreEqual(exp, act);
+            ".,.,.,.,.,.,.,.,.,.,.,.,.,.,.,.");
     }
 }
