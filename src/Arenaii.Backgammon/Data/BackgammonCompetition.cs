@@ -1,9 +1,8 @@
 using Arenaii.Data;
-using System;
 
 namespace Arenaii.Backgammon.Data;
 
-	[Serializable]
+[Serializable]
 	public class BackgammonCompetition: Competition<BackgammonSettings>
 	{
 	}

@@ -1,9 +1,8 @@
-using System;
 using System.IO;
 
 namespace Arenaii;
 
-	public static class Guard
+public static class Guard
 	{
 		public static T NotNull<T>(T value, string name) where T : class
 		{

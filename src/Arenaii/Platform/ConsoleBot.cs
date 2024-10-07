@@ -1,14 +1,12 @@
 using Arenaii.Configuration;
 using Arenaii.Data;
-using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Arenaii.Platform;
 
-	public class ConsoleBot : IDisposable
+public class ConsoleBot : IDisposable
 	{
 		public ConsoleBot(Bot bot)
 		{

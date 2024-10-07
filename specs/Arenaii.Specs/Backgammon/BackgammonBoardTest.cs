@@ -1,10 +1,9 @@
 using Arenaii.Backgammon;
-using NUnit.Framework;
 using System;
 
 namespace Arenaii.UnitTests.Backgammon;
 
-	public class BackgammonBoardTest
+public class BackgammonBoardTest
 	{
 		[Test]
 		public void ToString_Initial()

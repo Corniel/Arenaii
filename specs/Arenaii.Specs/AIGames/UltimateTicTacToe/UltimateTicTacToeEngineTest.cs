@@ -1,5 +1,4 @@
 using Arenaii.AIGames.UltimateTicTacToe;
-using NUnit.Framework;
 
 namespace Arenaii.UnitTests.AIGames.UltimateTicTacToe;
 

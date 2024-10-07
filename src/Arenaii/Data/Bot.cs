@@ -1,17 +1,14 @@
-using Qowaiv.Statistics;
-using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Xml.Serialization;
 
 namespace Arenaii.Data;
 
-	[DebuggerDisplay("{DebuggerDisplay}")]
+[DebuggerDisplay("{DebuggerDisplay}")]
 	[Serializable]
 	public class Bot : IComparable<Bot>
 	{

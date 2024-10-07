@@ -1,11 +1,10 @@
-using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace Arenaii.Data;
 
-	[DebuggerDisplay("{DebuggerDisplay}")]
+[DebuggerDisplay("{DebuggerDisplay}")]
 	[Serializable]
 	public class Match
 	{

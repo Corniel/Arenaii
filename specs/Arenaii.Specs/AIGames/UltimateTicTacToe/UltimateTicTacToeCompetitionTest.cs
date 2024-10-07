@@ -1,11 +1,10 @@
 using Arenaii.AIGames.UltimateTicTacToe.Data;
 using Arenaii.Data;
-using NUnit.Framework;
 using System.IO;
 
 namespace Arenaii.UnitTests.AIGames.UltimateTicTacToe;
 
-	[Ignore("Manual only")]
+[Ignore("Manual only")]
 	public class UltimateTicTacToeCompetitionTest
 	{
 		[Test]

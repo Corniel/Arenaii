@@ -1,5 +1,4 @@
 using Arenaii.AIGames.LightRiders;
-using NUnit.Framework;
 using System;
 
 namespace Arenaii.UnitTests.AIGames.LightRiders;

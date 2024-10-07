@@ -1,5 +1,4 @@
 using Arenaii.AIGames.Data;
-using System;
 
 namespace Arenaii.AIGames.LightRiders.Data;
 
