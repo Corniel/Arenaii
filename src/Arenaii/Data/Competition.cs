@@ -159,35 +159,33 @@ public abstract class Competition<T> where T : Settings
     {
         var pos = 1;
 
-        using (var writer = new StreamWriter(new FileStream(AppConfig.ResultsFile.FullName, FileMode.Create, FileAccess.Write)))
+        using var writer = new StreamWriter(new FileStream(AppConfig.ResultsFile.FullName, FileMode.Create, FileAccess.Write));
+        foreach (var bot in Bots)
         {
-            foreach (var bot in Bots)
+            writer.WriteLine("{0,4}  {1,4}  {2} ({3})", pos++, bot.Rating.ToString("0"), bot.FullName, Matches.Count(m => m.Id1 == bot.Id || m.Id2 == bot.Id));
+        }
+        writer.WriteLine();
+
+        var results = GetWeightedResults().ToList();
+
+        var combined = WeightedResult.Merge(results);
+
+        writer.WriteLine($"Total: {combined}");
+        writer.WriteLine();
+
+        foreach (var bot in Bots)
+        {
+            writer.WriteLine("Opponents: {0} ({1:0})", bot.FullName, bot.Rating);
+
+            var botResults = results
+                .Where(res => res.Bot1 == bot || (res.Bot2 == bot && !Settings.IsSymetric))
+                .ToList();
+
+            foreach (var oppo in botResults)
             {
-                writer.WriteLine("{0,4}  {1,4}  {2} ({3})", pos++, bot.Rating.ToString("0"), bot.FullName, Matches.Count(m => m.Id1 == bot.Id || m.Id2 == bot.Id));
+                writer.WriteLine("  {0}", oppo);
             }
             writer.WriteLine();
-
-            var results = GetWeightedResults().ToList();
-
-            var combined = WeightedResult.Merge(results);
-
-            writer.WriteLine($"Total: {combined}");
-            writer.WriteLine();
-
-            foreach (var bot in Bots)
-            {
-                writer.WriteLine("Opponents: {0} ({1:0})", bot.FullName, bot.Rating);
-
-                var botResults = results
-                    .Where(res => res.Bot1 == bot || (res.Bot2 == bot && !Settings.IsSymetric))
-                    .ToList();
-
-                foreach (var oppo in botResults)
-                {
-                    writer.WriteLine("  {0}", oppo);
-                }
-                writer.WriteLine();
-            }
         }
     }
 
@@ -200,11 +198,9 @@ public abstract class Competition<T> where T : Settings
 
         var file = new FileInfo(Path.Combine(directory.FullName, GetType().Name + ".xml"));
 
-        using (var stream = new FileStream(file.FullName, FileMode.Create, FileAccess.Write))
-        {
-            var serializer = new XmlSerializer(GetType());
-            serializer.Serialize(stream, this);
-        }
+        using var stream = new FileStream(file.FullName, FileMode.Create, FileAccess.Write);
+        var serializer = new XmlSerializer(GetType());
+        serializer.Serialize(stream, this);
     }
 
     public static TCompetition Load<TCompetition>() where TCompetition : Competition<T>
@@ -222,12 +218,10 @@ public abstract class Competition<T> where T : Settings
         {
             return Activator.CreateInstance<TCompetition>();
         }
-        using (var stream = file.OpenRead())
-        {
-            var serializer = new XmlSerializer(typeof(TCompetition));
-            var data = (TCompetition)serializer.Deserialize(stream);
-            data.RemoveUnlinkedMatches();
-            return data;
-        }
+        using var stream = file.OpenRead();
+        var serializer = new XmlSerializer(typeof(TCompetition));
+        var data = (TCompetition)serializer.Deserialize(stream);
+        data.RemoveUnlinkedMatches();
+        return data;
     }
 }

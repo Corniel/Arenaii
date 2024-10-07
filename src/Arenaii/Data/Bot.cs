@@ -95,46 +95,42 @@ namespace Arenaii.Data;
 		{
 			Guard.Exists(file, "file");
 
-			using (var hasher = SHA1Managed.Create())
-			{
-				using (var stream = file.OpenRead())
-				{
-					var bot = new Bot()
-					{
-						Id = Convert.ToBase64String(hasher.ComputeHash(stream)).Replace("=", "").Replace("/", ""),
-						Location = file,
-					};
+        using var hasher = SHA1Managed.Create();
+        using var stream = file.OpenRead();
+        var bot = new Bot()
+        {
+            Id = Convert.ToBase64String(hasher.ComputeHash(stream)).Replace("=", "").Replace("/", ""),
+            Location = file,
+        };
 
-					try
-					{
-						var assembly = Assembly.LoadFile(file.FullName);
-						var product = assembly.GetCustomAttribute<AssemblyProductAttribute>();
-						var versionObj = assembly.GetName().Version;
-						var versionAtt = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>();
+        try
+        {
+            var assembly = Assembly.LoadFile(file.FullName);
+            var product = assembly.GetCustomAttribute<AssemblyProductAttribute>();
+            var versionObj = assembly.GetName().Version;
+            var versionAtt = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>();
 
-						if (product != null)
-						{
-							bot.Name = product.Product;
-						}
-						if (versionObj.ToString() != "0.0.0.0")
-						{
-							bot.Version = ToStrippedVersion(versionObj.ToString());
-						}
-						else if (versionAtt != null)
-						{
-							bot.Version = ToStrippedVersion(versionAtt.Version);
-						}
-					}
-					catch { }
+            if (product != null)
+            {
+                bot.Name = product.Product;
+            }
+            if (versionObj.ToString() != "0.0.0.0")
+            {
+                bot.Version = ToStrippedVersion(versionObj.ToString());
+            }
+            else if (versionAtt != null)
+            {
+                bot.Version = ToStrippedVersion(versionAtt.Version);
+            }
+        }
+        catch { }
 
-					if (string.IsNullOrEmpty(bot.Name))
-					{
-						bot.Name = Path.GetFileNameWithoutExtension(file.Name);
-					}
-					return bot;
-				}
-			}
-		}
+        if (string.IsNullOrEmpty(bot.Name))
+        {
+            bot.Name = Path.GetFileNameWithoutExtension(file.Name);
+        }
+        return bot;
+    }
 
 		private static string ToStrippedVersion(string version)
 		{
