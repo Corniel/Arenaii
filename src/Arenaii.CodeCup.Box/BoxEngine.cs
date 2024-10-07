@@ -96,7 +96,12 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
                 Console.WriteLine(row);
             }
             Console.WriteLine();
-            Console.WriteLine($"{bot1.Bot.Name} ({bot1.Bot.Elo:0000}) - {bot2.Bot.Name} ({bot2.Bot.Elo:0000})");
+            Console.WriteLine($"{Display(bot1.Bot)} - {Display(bot2.Bot)}");
+
+            static string Display(Bot bot)
+                => bot.Version is { Length: > 0 }
+                ? $"{bot.Name} v{bot.Version} ({bot.Elo:0000})"
+                : $"{bot.Name}  ({bot.Elo:0000})";
         }
 
         public static void Move(Move move, Board board, Colors colors)
@@ -150,7 +155,7 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
             var score = Scores.Get(board.ToArray());
-            Console.WriteLine($"{score[colors.One]} - {score[colors.Two]}");
+            Console.WriteLine($"{score[colors.One]} - {score[colors.Two]}    ");
 
             static void Pixel(Move move, int i)
             {
