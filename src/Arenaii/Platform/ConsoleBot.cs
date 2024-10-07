@@ -1,30 +1,32 @@
 using Arenaii.Configuration;
 using Arenaii.Data;
+using Qowaiv;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
 
 namespace Arenaii.Platform;
 
-public class ConsoleBot : IDisposable
+[DebuggerDisplay("Bot = {Bot}")]
+public sealed class ConsoleBot : IDisposable
 	{
 		public ConsoleBot(Bot bot)
 		{
 			Bot = bot;
 			if(AppConfig.LogDirectory != null)
 			{
-				var name = string.Format("{0:yyyy-MM-dd HH_mm_ss_fff}.log", DateTime.Now);
+				var name = string.Format("{0:yyyy-MM-dd HH_mm_ss_fff}.log", Clock.Now());
 				var file = new FileInfo(Path.Combine(AppConfig.LogDirectory.FullName, bot.FullName, name));
-				if(!file.Directory.Exists)
+				if(!file.Directory!.Exists)
 				{
 					file.Directory.Create();
 				}
 				Writer = new StreamWriter(file.FullName, false);
 			}
 		}
-		public Bot Bot { get; protected set; }
+		public Bot Bot { get; }
 
-		private readonly Stopwatch Timer = new Stopwatch();
+		private readonly Stopwatch Timer = new();
 
 		private readonly StreamWriter Writer;
 
@@ -37,13 +39,14 @@ public class ConsoleBot : IDisposable
 		public TimeSpan Elapsed { get { return Timer.Elapsed; } }
 
 		/// <summary>Did the bot time out?</summary>
-		public bool TimedOut { get; protected set; }
-		public string Read(TimeSpan timeout)
+		public bool TimedOut { get; private set; }
+		
+    public string Read(TimeSpan timeout)
 		{
 			Start();
-			var tokenSource = new CancellationTokenSource();
+			using var tokenSource = new CancellationTokenSource();
 			var token = tokenSource.Token;
-			var task = Task.Factory.StartNew(() => process.StandardOutput.ReadLine(), token);
+			var task = Task.Factory.StartNew(process.StandardOutput.ReadLine, token);
 			if (!task.Wait((int)timeout.TotalMilliseconds, token))
 			{
 				process.Kill();
@@ -88,11 +91,11 @@ public class ConsoleBot : IDisposable
 
 		protected static Process CreateProcess(FileInfo exe)
 		{
-			var p = new Process();
-			p.StartInfo.WorkingDirectory = exe.Directory.FullName;
+            var p = new Process();
+			p.StartInfo.WorkingDirectory = exe.Directory!.FullName;
 			p.StartInfo.FileName = exe.FullName;
 			p.StartInfo.UseShellExecute = false;
-			p.StartInfo.CreateNoWindow = true;
+			//p.StartInfo.CreateNoWindow = true;
 			p.StartInfo.RedirectStandardInput = true;
 			p.StartInfo.RedirectStandardOutput = true;
 			p.Start();
@@ -118,7 +121,7 @@ public class ConsoleBot : IDisposable
 		}
 
 		/// <summary>Dispose the console platform.</summary>
-		protected virtual void Dispose(bool disposing)
+		protected void Dispose(bool disposing)
 		{
 			if (!m_IsDisposed)
 			{
