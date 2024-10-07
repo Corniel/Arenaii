@@ -9,91 +9,91 @@ using System.Xml.Serialization;
 namespace Arenaii.Data;
 
 [DebuggerDisplay("{DebuggerDisplay}")]
-	[Serializable]
-	public class Bot : IComparable<Bot>
-	{
-		public Bot()
-		{
-			Elo = 1600;
-		}
+[Serializable]
+public class Bot : IComparable<Bot>
+{
+    public Bot()
+    {
+        Elo = 1600;
+    }
 
-		[XmlAttribute("id")]
-		public string Id { get; set; }
+    [XmlAttribute("id")]
+    public string Id { get; set; }
 
-		[XmlAttribute("name")]
-		public string Name { get; set; }
+    [XmlAttribute("name")]
+    public string Name { get; set; }
 
-		public string FullName
-		{
-			get
-			{
-				var name = Name;
-				if (!string.IsNullOrEmpty(Version))
-				{
-					name += " v" + Version;
-				}
-				return name;
-			}
-		}
+    public string FullName
+    {
+        get
+        {
+            var name = Name;
+            if (!string.IsNullOrEmpty(Version))
+            {
+                name += " v" + Version;
+            }
+            return name;
+        }
+    }
 
-		[XmlAttribute("v")]
-		public string Version { get; set; }
+    [XmlAttribute("v")]
+    public string Version { get; set; }
 
-		[XmlAttribute("elo")]
-		public float Elo { get { return (float)Math.Round((double)Rating, 1); } set { Rating = value; } }
+    [XmlAttribute("elo")]
+    public float Elo { get { return (float)Math.Round((double)Rating, 1); } set { Rating = value; } }
 
-		[XmlAttribute("a")]
-		public bool Active { get; set; }
+    [XmlAttribute("a")]
+    public bool Active { get; set; }
 
-		[XmlIgnore]
-		public Elo Rating { get; set; }
+    [XmlIgnore]
+    public Elo Rating { get; set; }
 
-		[XmlIgnore]
-		public FileInfo Location { get; set; }
+    [XmlIgnore]
+    public FileInfo Location { get; set; }
 
-		public int CompareTo(Bot other)
-		{
-			var compare = other.Active.CompareTo(Active);
-			if (compare != 0) { return compare; }
-			return other.Elo.CompareTo(Elo);
-		}
+    public int CompareTo(Bot other)
+    {
+        var compare = other.Active.CompareTo(Active);
+        if (compare != 0) { return compare; }
+        return other.Elo.CompareTo(Elo);
+    }
 
-		[DebuggerBrowsable(DebuggerBrowsableState.Never), ExcludeFromCodeCoverage]
-		private string DebuggerDisplay
-		{
-			get
-			{
-				return string.Format(CultureInfo.InvariantCulture,
-					"{0} v{1} {2:0.0} {{{3}}}{4}",
-					Name,
-					Version,
-					Elo,
-					Id,
-					Active ? "*" : "");
-			}
-		}
+    [DebuggerBrowsable(DebuggerBrowsableState.Never), ExcludeFromCodeCoverage]
+    private string DebuggerDisplay
+    {
+        get
+        {
+            return string.Format(CultureInfo.InvariantCulture,
+                "{0} v{1} {2:0.0} {{{3}}}{4}",
+                Name,
+                Version,
+                Elo,
+                Id,
+                Active ? "*" : "");
+        }
+    }
 
-		public static Bot Create(DirectoryInfo directory)
-		{
-			var file = directory
-				.GetFiles()
-				.FirstOrDefault(f => f.Name.ToUpperInvariant() == (directory.Name + ".EXE").ToUpperInvariant());
+    public static Bot Create(DirectoryInfo directory)
+    {
+        var file = directory
+            .GetFiles()
+            .FirstOrDefault(f => f.Name.ToUpperInvariant() == (directory.Name + ".EXE").ToUpperInvariant());
 
-			if (file != null)
-			{
-				return Create(file);
-			}
-			file = directory.GetFiles().FirstOrDefault(f => f.Extension == ".exe");
-			if (file != null)
-			{
-				return Create(file);
-			}
-			return null;
-		}
+        if (file != null)
+        {
+            return Create(file);
+        }
+        file = directory.GetFiles().FirstOrDefault(f => f.Extension == ".exe");
+        if (file != null)
+        {
+            return Create(file);
+        }
+        return null;
+    }
 
-		public static Bot Create(FileInfo file)
-		{
-			Guard.Exists(file, "file");
+    public static Bot Create(FileInfo file)
+    {
+        Guard.Exists(file, "file");
 
         using var hasher = SHA1Managed.Create();
         using var stream = file.OpenRead();
@@ -132,21 +132,21 @@ namespace Arenaii.Data;
         return bot;
     }
 
-		private static string ToStrippedVersion(string version)
-		{
-			var parts = (version ?? string.Empty).Split('.').ToList();
-			while (parts.Count > 1)
-			{
-				var last = parts.Last();
-				if (last == "0" || last == "*")
-				{
-					parts.RemoveAt(parts.Count - 1);
-				}
-				else
-				{
-					break;
-				}
-			}
-			return string.Join(".", parts);
-		}
-	}
+    private static string ToStrippedVersion(string version)
+    {
+        var parts = (version ?? string.Empty).Split('.').ToList();
+        while (parts.Count > 1)
+        {
+            var last = parts.Last();
+            if (last == "0" || last == "*")
+            {
+                parts.RemoveAt(parts.Count - 1);
+            }
+            else
+            {
+                break;
+            }
+        }
+        return string.Join(".", parts);
+    }
+}
