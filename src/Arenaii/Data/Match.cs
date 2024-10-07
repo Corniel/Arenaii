@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-namespace Arenaii.Data
-{
+namespace Arenaii.Data;
+
 	[DebuggerDisplay("{DebuggerDisplay}")]
 	[Serializable]
 	public class Match
@@ -37,4 +37,3 @@ namespace Arenaii.Data
 		[DebuggerBrowsable(DebuggerBrowsableState.Never), ExcludeFromCodeCoverage]
 		private string DebuggerDisplay { get { return string.Format("{0}-{1} : {2}-{3}", Id1, Id2, Score, 1 - Score); } }
 	}
-}

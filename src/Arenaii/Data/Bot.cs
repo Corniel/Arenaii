@@ -9,8 +9,8 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Xml.Serialization;
 
-namespace Arenaii.Data
-{
+namespace Arenaii.Data;
+
 	[DebuggerDisplay("{DebuggerDisplay}")]
 	[Serializable]
 	public class Bot : IComparable<Bot>
@@ -157,4 +157,3 @@ namespace Arenaii.Data
 			return string.Join(".", parts);
 		}
 	}
-}

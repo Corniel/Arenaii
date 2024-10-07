@@ -3,8 +3,8 @@ using Arenaii.Data;
 using NUnit.Framework;
 using System.IO;
 
-namespace Arenaii.UnitTests.AIGames.UltimateTicTacToe
-{
+namespace Arenaii.UnitTests.AIGames.UltimateTicTacToe;
+
 	[Ignore("Manual only")]
 	public class UltimateTicTacToeCompetitionTest
 	{
@@ -26,4 +26,3 @@ namespace Arenaii.UnitTests.AIGames.UltimateTicTacToe
 			competition.Save(new DirectoryInfo(@"c:\temp"));
 		}
 	}
-}

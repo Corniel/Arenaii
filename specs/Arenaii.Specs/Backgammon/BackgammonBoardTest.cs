@@ -2,8 +2,8 @@ using Arenaii.Backgammon;
 using NUnit.Framework;
 using System;
 
-namespace Arenaii.UnitTests.Backgammon
-{
+namespace Arenaii.UnitTests.Backgammon;
+
 	public class BackgammonBoardTest
 	{
 		[Test]
@@ -17,4 +17,3 @@ namespace Arenaii.UnitTests.Backgammon
 			Assert.AreEqual(exp, act);
 		}
 	}
-}

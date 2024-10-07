@@ -6,8 +6,8 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Arenaii.Platform
-{
+namespace Arenaii.Platform;
+
 	public class ConsoleBot : IDisposable
 	{
 		public ConsoleBot(Bot bot)
@@ -143,4 +143,3 @@ namespace Arenaii.Platform
 
 		#endregion
 	}
-}

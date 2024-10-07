@@ -3,9 +3,9 @@ using NUnit.Framework;
 using Qowaiv.Statistics;
 using System.IO;
 
-namespace Arenaii.UnitTests.Domain
-{
-    public class AIClientNameTest
+namespace Arenaii.UnitTests.Domain;
+
+public class AIClientNameTest
 	{
 		[Test]
 		public void Create_ArenaiiAssembly_ArenaiiAIcompetionrunner2()
@@ -21,4 +21,3 @@ namespace Arenaii.UnitTests.Domain
 			Assert.AreEqual(version, act.Version, "Version");
 		}
 	}
-}

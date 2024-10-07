@@ -1,9 +1,9 @@
 using Arenaii.AIGames.UltimateTicTacToe;
 using NUnit.Framework;
 
-namespace Arenaii.UnitTests.AIGames.UltimateTicTacToe
-{
-    public class UltimateTicTacToeEngineTest
+namespace Arenaii.UnitTests.AIGames.UltimateTicTacToe;
+
+public class UltimateTicTacToeEngineTest
 	{
 		[Test]
 		public void Apply_20_()
@@ -104,4 +104,3 @@ namespace Arenaii.UnitTests.AIGames.UltimateTicTacToe
 			}
 		}
 	}
-}

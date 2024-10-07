@@ -1,8 +1,8 @@
 using Arenaii.Data;
 using System;
 
-namespace Arenaii.Backgammon.Data
-{
+namespace Arenaii.Backgammon.Data;
+
 	[Serializable]
 	public class BackgammonSettings : Settings
 	{
@@ -14,4 +14,3 @@ namespace Arenaii.Backgammon.Data
 		public int TimeBank { get; set; }
 		public int TimePerMove { get; set; }
 	}
-}
