@@ -11,16 +11,17 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
     {
         var settings = competition.Settings;
         var timeMax = settings.TimeLimit;
+        var colors = Rnd.NextColors();
 
         using var bot1 = ConsoleBot.Create(pairing.Bot1);
         using var bot2 = ConsoleBot.Create(pairing.Bot2);
 
-        Render.Board(bot1, bot2);
+        Render.Board(bot1, bot2, colors);
 
         var bot = bot1;
-
-        var colors = Rnd.NextColors();
+        
         var start = new Move(Point.Parse("Hh"), Rnd.NextTile(), true);
+        var turn = 0;
 
         var board = Board.Empty.Move(start);
         Render.Move(start, board, colors);
@@ -33,8 +34,12 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
         bot2.Write(((int)colors.Two).ToString());
         bot2.Write(start.ToString());
 
-        while (HasMoves(board))
+        while (MouveCount(board) is { } count && count != 0)
         {
+            turn++;
+            competition.Turns[turn]++;
+            competition.Options[turn] += count;
+
             var tile = Rnd.NextTile();
 
             bot.Write(response.ToString());
@@ -50,6 +55,8 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
             bot = bot == bot1 ? bot2 : bot1;
         }
 
+        competition.Turns[turn + 1]++;
+
         bot1.Write(Move.Quit.ToString());
         bot2.Write(Move.Quit.ToString());
 
@@ -60,7 +67,7 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
 
         var score = 0.5f;
         if (sco1 > sco2) { score = 1; }
-        if (sco2 > sco1) { score = '0'; }
+        if (sco2 > sco1) { score = 0; }
 
         return new Match(pairing.Bot1, pairing.Bot2, score)
         {
@@ -70,16 +77,25 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
     }
 
     [Pure]
-    private static bool HasMoves(Board board)
+    private static int MouveCount(Board board)
     {
         var ver = new MoveGenerator.Vertical(board);
         var hor = new MoveGenerator.Horizontal(board);
-        return ver.MoveNext() || hor.MoveNext();
+        var count = 0;
+        while (ver.MoveNext())
+        {
+            count++;
+        }
+        while (hor.MoveNext())
+        {
+            count++;
+        }
+        return count;
     }
 
     private static class Render
     {
-        public static void Board(ConsoleBot bot1, ConsoleBot bot2)
+        public static void Board(ConsoleBot bot1, ConsoleBot bot2, Colors colors)
         {
             Console.CursorVisible = false;
             Console.BackgroundColor = ConsoleColor.Black;
@@ -94,12 +110,21 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
                 Console.WriteLine(row);
             }
             Console.WriteLine();
-            Console.WriteLine($"{Display(bot1.Bot)} - {Display(bot2.Bot)}");
+            Display(bot1.Bot, colors.One);
+            Console.Write(" - ");
+            Display(bot2.Bot, colors.Two);
+            Console.WriteLine();
 
-            static string Display(Bot bot)
-                => bot.Version is { Length: > 0 }
-                ? $"{bot.Name} v{bot.Version} ({bot.Elo:0000})"
-                : $"{bot.Name}  ({bot.Elo:0000})";
+            static void Display(Bot bot, Color color)
+            {
+                Console.BackgroundColor = Color(color);
+                Console.Write("  ");
+                Console.BackgroundColor = ConsoleColor.Black;
+
+                Console.Write(bot.Version is { Length: > 0 }
+                    ? $" {bot.Name} v{bot.Version} ({bot.Elo:0000})"
+                    : $" {bot.Name}  ({bot.Elo:0000})");
+            }
         }
 
         public static void Move(Move move, Board board, Colors colors)
