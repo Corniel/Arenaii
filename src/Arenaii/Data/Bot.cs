@@ -21,7 +21,7 @@ public class Bot : IComparable<Bot>
     public string Id { get; set; }
 
     [XmlAttribute("name")]
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     public string FullName
     {
@@ -37,10 +37,14 @@ public class Bot : IComparable<Bot>
     }
 
     [XmlAttribute("v")]
-    public string Version { get; set; }
+    public string? Version { get; set; }
 
     [XmlAttribute("elo")]
-    public float Elo { get { return (float)Math.Round((double)Rating, 1); } set { Rating = value; } }
+    public float Elo
+    {
+        get => (float)Math.Round((double)Rating, 1);
+        set => Rating = value;
+    }
 
     [XmlAttribute("a")]
     public bool Active { get; set; }
@@ -49,13 +53,13 @@ public class Bot : IComparable<Bot>
     public Elo Rating { get; set; }
 
     [XmlIgnore]
-    public FileInfo Location { get; set; }
+    public FileInfo? Location { get; set; }
 
-    public int CompareTo(Bot other)
+    public int CompareTo(Bot? other)
     {
-        var compare = other.Active.CompareTo(Active);
+        var compare = other?.Active.CompareTo(Active) ?? +1;
         if (compare != 0) { return compare; }
-        return other.Elo.CompareTo(Elo);
+        return other!.Elo.CompareTo(Elo);
     }
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never), ExcludeFromCodeCoverage]
@@ -73,17 +77,17 @@ public class Bot : IComparable<Bot>
         }
     }
 
-    public static Bot Create(DirectoryInfo directory)
+    public static Bot? Create(DirectoryInfo directory)
     {
         var file = directory
-            .GetFiles()
+            .EnumerateFiles()
             .FirstOrDefault(f => f.Name.ToUpperInvariant() == (directory.Name + ".EXE").ToUpperInvariant());
 
         if (file != null)
         {
             return Create(file);
         }
-        file = directory.GetFiles().FirstOrDefault(f => f.Extension == ".exe");
+        file = directory.EnumerateFiles().FirstOrDefault(f => f.Extension == ".exe");
         if (file != null)
         {
             return Create(file);
@@ -95,7 +99,7 @@ public class Bot : IComparable<Bot>
     {
         Guard.Exists(file, "file");
 
-        using var hasher = SHA1Managed.Create();
+        using var hasher = SHA1.Create();
         using var stream = file.OpenRead();
         var bot = new Bot()
         {
@@ -105,7 +109,7 @@ public class Bot : IComparable<Bot>
 
         try
         {
-            var assembly = Assembly.LoadFile(file.FullName);
+            var assembly = Assembly.LoadFile(file.FullName.Replace(".exe", ".dll"));
             var product = assembly.GetCustomAttribute<AssemblyProductAttribute>();
             var versionObj = assembly.GetName().Version;
             var versionAtt = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>();
@@ -114,13 +118,13 @@ public class Bot : IComparable<Bot>
             {
                 bot.Name = product.Product;
             }
-            if (versionObj.ToString() != "0.0.0.0")
-            {
-                bot.Version = ToStrippedVersion(versionObj.ToString());
-            }
-            else if (versionAtt != null)
+            if (versionAtt != null)
             {
                 bot.Version = ToStrippedVersion(versionAtt.Version);
+            }
+            else if (versionObj?.ToString() != "0.0.0.0" && versionObj?.ToString() != "1.0.0.0")
+            {
+                bot.Version = ToStrippedVersion(versionObj!.ToString());
             }
         }
         catch { }
@@ -137,7 +141,7 @@ public class Bot : IComparable<Bot>
         var parts = (version ?? string.Empty).Split('.').ToList();
         while (parts.Count > 1)
         {
-            var last = parts.Last();
+            var last = parts[^1];
             if (last == "0" || last == "*")
             {
                 parts.RemoveAt(parts.Count - 1);

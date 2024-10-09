@@ -1,5 +1,6 @@
 using Arenaii.CodeCup.Box.Data;
 using Arenaii.Platform;
+using System.Collections.Generic;
 
 namespace Arenaii.CodeCup.Box;
 
@@ -16,15 +17,19 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
         using var bot1 = ConsoleBot.Create(pairing.Bot1);
         using var bot2 = ConsoleBot.Create(pairing.Bot2);
 
-        Render.Board(bot1, bot2, colors);
+        var name1 = DisplayName(bot1.Bot);
+        var name2 = DisplayName(bot2.Bot);
+
+        Render.Board(name1, name2, colors);
+        Render.Rankings(competition.ActiveBots);
 
         var bot = bot1;
-        
+
         var start = new Move(Point.Parse("Hh"), Rnd.NextTile(), true);
         var turn = 0;
 
         var board = Board.Empty.Move(start);
-        Render.Move(start, board, colors);
+        Render.Move(start, board, colors, bot1, bot2);
 
         var response = Move.Start;
 
@@ -50,7 +55,7 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
             response = Move.Parse($"{read[..2]}{tile}{read[2..]}");
 
             board = board.Move(response);
-            Render.Move(response, board, colors);
+            Render.Move(response, board, colors, bot1, bot2);
 
             bot = bot == bot1 ? bot2 : bot1;
         }
@@ -93,9 +98,39 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
         return count;
     }
 
+    [Pure]
+    private static string DisplayName(Bot bot)
+        => bot.Version is { Length: > 0 }
+            ? $"{bot.Name} v{bot.Version} ({bot.Elo:0000})"
+            : $"{bot.Name}  ({bot.Elo:0000})";
+
     private static class Render
     {
-        public static void Board(ConsoleBot bot1, ConsoleBot bot2, Colors colors)
+        public static void Rankings(IEnumerable<Bot> bots)
+        {
+            var pos = 1;
+
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.Gray;
+
+            var ranking = bots.OrderByDescending(b => b.Elo).ToArray();
+            var names = ranking.Select(b => DisplayName(b)[..^7]).ToArray();
+            var max = names.Max(n => n.Length);
+
+            foreach (var bot in ranking)
+            {
+                Console.CursorLeft = 45;
+                Console.CursorTop = pos;
+
+                Console.Write($"{pos,2}. ");
+                Console.Write(names[pos - 1]);
+                Console.CursorLeft = 42 + 10 + max;
+                Console.Write($"{bot.Elo,4:0}");
+                pos++;
+            }
+        }
+
+        public static void Board(string bot1, string bot2, Colors colors)
         {
             Console.CursorVisible = false;
             Console.BackgroundColor = ConsoleColor.Black;
@@ -103,33 +138,31 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
             Console.Clear();
 
             Console.Write(' ');
-            for (var col = 'a'; col <= 't'; col++) Console.Write(col);
+            for (var col = 'a'; col <= 't'; col++) Console.Write($" {col}");
             Console.WriteLine();
             for (var row = 'A'; row <= 'P'; row++)
             {
                 Console.WriteLine(row);
             }
             Console.WriteLine();
-            Display(bot1.Bot, colors.One);
+            Display(bot1, colors.One);
             Console.Write(" - ");
-            Display(bot2.Bot, colors.Two);
+            Display(bot2, colors.Two);
             Console.WriteLine();
 
-            static void Display(Bot bot, Color color)
+            static void Display(string bot, Color color)
             {
                 Console.BackgroundColor = Color(color);
                 Console.Write("  ");
                 Console.BackgroundColor = ConsoleColor.Black;
 
-                Console.Write(bot.Version is { Length: > 0 }
-                    ? $" {bot.Name} v{bot.Version} ({bot.Elo:0000})"
-                    : $" {bot.Name}  ({bot.Elo:0000})");
+                Console.Write($" {bot}");
             }
         }
 
-        public static void Move(Move move, Board board, Colors colors)
+        public static void Move(Move move, Board board, Colors colors, ConsoleBot bot1, ConsoleBot bot2)
         {
-            Console.CursorLeft = move.Point.Col + 1;
+            Console.CursorLeft = move.Point.Col * 2 + 1;
             Console.CursorTop = move.Point.Row + 1;
 
             Console.ForegroundColor = ConsoleColor.Black;
@@ -142,7 +175,7 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
                     Pixel(move, i);
                 }
                 Console.CursorTop++;
-                Console.CursorLeft -= 6;
+                Console.CursorLeft -= 12;
 
                 for (var i = 5; i >= 0; i--)
                 {
@@ -155,16 +188,16 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
                 {
                     Pixel(move, i);
                     Console.CursorTop++;
-                    Console.CursorLeft--;
+                    Console.CursorLeft -= 2;
                 }
                 Console.CursorTop -= 6;
-                Console.CursorLeft++;
+                Console.CursorLeft += 2;
 
                 for (var i = 0; i < 6; i++)
                 {
                     Pixel(move, i);
                     Console.CursorTop++;
-                    Console.CursorLeft--;
+                    Console.CursorLeft -= 2;
                 }
             }
 
@@ -173,17 +206,35 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
 
 
             Console.CursorLeft = 0;
-            Console.CursorTop = 20;
+            Console.CursorTop = 19;
+
+            
+            var score = Scores.Get(board.ToArray());
+
+            Console.BackgroundColor = Color(colors.One);
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.Write($"{score[colors.One],2}");
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
-            var score = Scores.Get(board.ToArray());
-            Console.WriteLine($"{score[colors.One]} - {score[colors.Two]}    ");
+
+            Console.Write($" {bot1.Elapsed.TotalSeconds:00.00}s".Replace(',', '.'));
+
+            Console.CursorLeft = DisplayName(bot1.Bot).Length + 6;
+            Console.BackgroundColor = Color(colors.Two);
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.Write($"{score[colors.Two],2}");
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Black;
+
+            Console.Write($" {bot2.Elapsed.TotalSeconds:00.00}s".Replace(',', '.'));
 
             static void Pixel(Move move, int i)
             {
                 var color = move.Tile[i];
                 Console.BackgroundColor = Color(color);
+                Console.Write(' ');
                 Console.Write((int)color);
             }
         }

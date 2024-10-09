@@ -16,16 +16,16 @@ public sealed class Bots : List<Bot>
     {
         Deactivate();
 
-        foreach (var dir in directory.GetDirectories())
+        foreach (var dir in directory.EnumerateDirectories())
         {
             var bot = Bot.Create(dir);
             if (bot == null) { continue; }
 
-            var existing = this.FirstOrDefault(b => b.Id == bot.Id);
-            if (existing != null)
+            if (Find(b => b.Id == bot.Id) is { } existing)
             {
                 existing.Active = true;
                 existing.Location = bot.Location;
+                existing.Version ??= bot.Version;
             }
             else
             {
