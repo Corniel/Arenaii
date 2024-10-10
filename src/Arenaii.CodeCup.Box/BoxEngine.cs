@@ -52,6 +52,18 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
 
             var read = bot.Read(timeMax);
 
+            // Invalid move / timeout.
+            if (read is not { Length: 3 })
+            {
+                var isBot1 = bot == bot1;
+
+                return new Match(pairing.Bot1, pairing.Bot2, isBot1 ? 0 : 1)
+                {
+                    Duration1 = bot1.Elapsed,
+                    Duration2 = bot2.Elapsed,
+                };
+            }
+
             response = Move.Parse($"{read[..2]}{tile}{read[2..]}");
 
             board = board.Move(response);
