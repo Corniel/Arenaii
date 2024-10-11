@@ -44,6 +44,8 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
             turn++;
             competition.Turns[turn]++;
             competition.Options[turn] += count;
+            competition.Min[turn] = Math.Min(competition.Min[turn], count);
+            competition.Max[turn] = Math.Max(competition.Max[turn], count);
 
             var tile = Rnd.NextTile();
 
