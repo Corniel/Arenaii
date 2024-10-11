@@ -46,7 +46,7 @@ public abstract class Simulator<TCompetition, TSettings>
 		{
 			var queue = new Queue<Pairing>();
 			var sorted = Competition.Bots
-				.Where(bot => bot.Active)
+				.Where(bot => bot.IsActive)
 				.OrderBy(bot => Engine.Rnd.Next())
 				.ToArray();
 
@@ -65,7 +65,11 @@ public abstract class Simulator<TCompetition, TSettings>
 		{
 			var queue = new Queue<Pairing>();
 
-			var results = Competition.GetWeightedResults().OrderBy(res => res.Count).ToList();
+			var results = Competition
+                .GetWeightedResults()
+                .Where(r => r.Bot1.IsActive && r.Bot2.IsActive)
+                .OrderBy(res => res.Count)
+                .ToList();
 
 			if (results.Count == 0) { return queue; }
 

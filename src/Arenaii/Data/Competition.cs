@@ -18,7 +18,7 @@ public abstract class Competition<T> where T : Settings
 
     public Bots Bots { get; protected set; }
 
-    public IEnumerable<Bot> ActiveBots { get { return Bots.Where(b => b.Active); } }
+    public IEnumerable<Bot> RankingBots { get { return Bots.Where(b => b.IsActive || b.IsReference); } }
 
     public List<Match> Matches { get; protected set; }
 
@@ -51,9 +51,9 @@ public abstract class Competition<T> where T : Settings
 
     private IEnumerable<WeightedResult> GetSymetricWeightedResults()
     {
-        foreach (var bot1 in Bots.Where(bot => bot.Active))
+        foreach (var bot1 in RankingBots)
         {
-            foreach (var bot2 in Bots.Where(bot => bot.Active && bot != bot1))
+            foreach (var bot2 in RankingBots.Where(bot => bot != bot1))
             {
                 var matches = Matches.Where
                 (m =>
@@ -95,9 +95,9 @@ public abstract class Competition<T> where T : Settings
     }
     private IEnumerable<WeightedResult> GetASymetricWeightedResults()
     {
-        foreach (var bot1 in Bots.Where(bot => bot.Active))
+        foreach (var bot1 in RankingBots)
         {
-            foreach (var bot2 in Bots.Where(bot => bot.Active && bot != bot1))
+            foreach (var bot2 in RankingBots.Where(bot => bot != bot1))
             {
                 var matches = Matches.Where(m => m.Id1 == bot1.Id && m.Id2 == bot2.Id);
                 var result = new WeightedResult()
@@ -133,16 +133,18 @@ public abstract class Competition<T> where T : Settings
 
         for (var k = 16.0; k >= 0.5; k /= 2)
         {
-            foreach (var result in results)
+            foreach (var result in results.Where(r => r.Count > 0))
             {
                 Bot bot1 = result.Bot1;
                 Bot bot2 = result.Bot2;
                 var z = Elo.GetZScore(bot1.Rating, bot2.Rating);
 
                 var delta = (double)result.Score - z;
+                // Over 10 games does not give any extra weight.
+                var f = Math.Min(result.Count, 10) / 10d;
 
-                bot1.Rating += delta * k;
-                bot2.Rating -= delta * k;
+                bot1.Rating += delta * k * f;
+                bot2.Rating -= delta * k * f;
             }
         }
 
@@ -179,6 +181,7 @@ public abstract class Competition<T> where T : Settings
 
             var botResults = results
                 .Where(res => res.Bot1 == bot || (res.Bot2 == bot && !Settings.IsSymetric))
+                .Where(res => res.Count > 0)
                 .ToList();
 
             foreach (var oppo in botResults)

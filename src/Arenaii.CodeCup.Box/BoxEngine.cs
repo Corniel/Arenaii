@@ -21,7 +21,7 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
         var name2 = DisplayName(bot2.Bot);
 
         Render.Board(name1, name2, colors);
-        Render.Rankings(competition.ActiveBots);
+        Render.Rankings(competition.RankingBots);
 
         var bot = bot1;
 
@@ -127,7 +127,7 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Gray;
 
-            var ranking = bots.OrderByDescending(b => b.Elo).ToArray();
+            var ranking = bots.Where(b => b.IsActive).OrderByDescending(b => b.Elo).ToArray();
             var names = ranking.Select(b => DisplayName(b)[..^7]).ToArray();
             var max = names.Max(n => n.Length);
 

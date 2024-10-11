@@ -47,7 +47,10 @@ public class Bot : IComparable<Bot>
     }
 
     [XmlAttribute("a")]
-    public bool Active { get; set; }
+    public bool IsActive { get; set; }
+
+    [XmlAttribute("r")]
+    public bool IsReference { get; set; }
 
     [XmlIgnore]
     public Elo Rating { get; set; }
@@ -57,7 +60,9 @@ public class Bot : IComparable<Bot>
 
     public int CompareTo(Bot? other)
     {
-        var compare = other?.Active.CompareTo(Active) ?? +1;
+        if(other is null) return +1;
+
+        var compare = (other.IsActive || other.IsReference).CompareTo(IsActive || IsReference);
         if (compare != 0) { return compare; }
         return other!.Elo.CompareTo(Elo);
     }
@@ -73,7 +78,7 @@ public class Bot : IComparable<Bot>
                 Version,
                 Elo,
                 Id,
-                Active ? "*" : "");
+                IsActive ? "*" : "");
         }
     }
 
