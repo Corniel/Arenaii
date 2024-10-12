@@ -182,6 +182,8 @@ public abstract class Competition<T> where T : Settings
             var botResults = results
                 .Where(res => res.Bot1 == bot || (res.Bot2 == bot && !Settings.IsSymetric))
                 .Where(res => res.Count > 0)
+                .OrderByDescending(res => res.Bot1 == bot)
+                .ThenBy(res => res.Bot1 == bot ? +res.Score : -res.Score)
                 .ToList();
 
             foreach (var oppo in botResults)
