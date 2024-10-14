@@ -1,6 +1,9 @@
 using Arenaii.CodeCup.Box.Data;
+using Arenaii.Configuration;
 using Arenaii.Platform;
+using Qowaiv;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Arenaii.CodeCup.Box;
 
@@ -10,9 +13,14 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
 
     public Match Simulate(Pairing pairing, BoxCompetition competition)
     {
+        using var gamelog = GameLogger();
+
         var settings = competition.Settings;
         var timeMax = settings.TimeLimit;
         var colors = Rnd.NextColors();
+
+        gamelog.WriteLine($"{(int)colors.One}: {pairing.Bot1.FullName}");
+        gamelog.WriteLine($"{(int)colors.Two}: {pairing.Bot2.FullName}");
 
         using var bot1 = ConsoleBot.Create(pairing.Bot1);
         using var bot2 = ConsoleBot.Create(pairing.Bot2);
@@ -26,6 +34,9 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
         var bot = bot1;
 
         var start = new Move(Point.Parse("Hh"), Rnd.NextTile(), true);
+
+        gamelog.WriteLine(start);
+
         var turn = 0;
 
         var board = Board.Empty.Move(start);
@@ -68,6 +79,8 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
 
             response = Move.Parse($"{read[..2]}{tile}{read[2..]}");
 
+            gamelog.WriteLine(response);
+
             board = board.Move(response);
             Render.Move(response, board, colors, bot1, bot2);
 
@@ -87,6 +100,10 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
         var score = 0.5f;
         if (sco1 > sco2) { score = 1; }
         if (sco2 > sco1) { score = 0; }
+
+        gamelog.WriteLine("Quit");
+        gamelog.WriteLine($"{sco1} - {sco2}");
+        gamelog.Flush();
 
         return new Match(pairing.Bot1, pairing.Bot2, score)
         {
@@ -264,4 +281,9 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
             _ => ConsoleColor.Black,
         };
     }
+
+
+    private static StreamWriter GameLogger() => AppConfig.LogDirectory is { } dir
+            ? new StreamWriter(Path.Combine(dir.FullName, "_games", $"{Uuid.NewSequential()}.log"))
+            : new StreamWriter(new MemoryStream());
 }
