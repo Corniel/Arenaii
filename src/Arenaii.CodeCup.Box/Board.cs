@@ -11,11 +11,25 @@ public readonly struct Board : IEquatable<Board>
 
     private readonly ushort[] Columns;
 
-    public int Filled => Columns.Take(Column.Count).Sum(c => BitOperations.PopCount(c));
-
     public Column this[Color color, int col] => new Column(Columns[Idx(color, col)]);
 
     public Column this[int index] => new Column(Columns[index]);
+
+    public int AllDots => Dots(Color.None);
+
+    [Pure]
+    public int Dots(Color color)
+    {
+        var count = 0;
+        var offset = Column.Count * (int)color;
+        var max = offset + Column.Count;
+
+        for (var i = offset; i < max; i++)
+        {
+            count += BitOperations.PopCount(Columns[i]);
+        }
+        return count;
+    }
 
     [Pure]
     public Board Move(Move move) => Move(move, new ushort[Layer.Count * Column.Count]);

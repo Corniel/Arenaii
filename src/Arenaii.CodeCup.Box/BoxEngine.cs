@@ -244,7 +244,7 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
 
             Console.BackgroundColor = Color(colors.One);
             Console.ForegroundColor = ConsoleColor.Black;
-            Console.Write($"{score[colors.One],2}");
+            Console.Write($"{board.Dots(colors.One),2}");
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
@@ -254,12 +254,30 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
             Console.CursorLeft = DisplayName(bot1.Bot).Length + 6;
             Console.BackgroundColor = Color(colors.Two);
             Console.ForegroundColor = ConsoleColor.Black;
-            Console.Write($"{score[colors.Two],2}");
+            Console.Write($"{board.Dots(colors.Two),2}"); 
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
 
             Console.Write($" {bot2.Elapsed.TotalSeconds:00.00}s".Replace(',', '.'));
+            
+            Console.CursorTop += 1;
+            Console.CursorLeft = 0;
+
+            Console.ForegroundColor = Color(colors.One);
+            Console.Write($"{score[colors.One],2}");
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(" PT");
+
+            Console.CursorLeft = DisplayName(bot1.Bot).Length + 6;
+
+            Console.ForegroundColor = Color(colors.Two);
+            Console.Write($"{score[colors.Two],2}");
+
+            Console.ForegroundColor = ConsoleColor.White;
+
+            Console.Write(" PT");
 
             static void Pixel(Move move, int i)
             {

@@ -131,7 +131,7 @@ public abstract class Competition<T> where T : Settings
     {
         var results = GetWeightedResults().ToList();
 
-        for (var k = 64.0; k >= 0.48; k /= 2)
+        for (var k = 128.0; k >= 0.48; k /= 2)
         {
             foreach (var result in results.Where(r => r.Count > 0))
             {
