@@ -164,17 +164,33 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
         public static void Board(string bot1, string bot2, Colors colors)
         {
             Console.CursorVisible = false;
+
             Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.Gray;
             Console.Clear();
 
-            Console.Write(' ');
-            for (var col = 'a'; col <= 't'; col++) Console.Write($" {col}");
-            Console.WriteLine();
+            Console.BackgroundColor = ConsoleColor.DarkGray;
+            Console.ForegroundColor = ConsoleColor.Black;
+
+            Row();
+
             for (var row = 'A'; row <= 'P'; row++)
             {
-                Console.WriteLine(row);
+                Console.WriteLine($" {row}");
             }
+
+            Console.CursorTop = 1;
+
+            for (var row = 'A'; row <= 'P'; row++)
+            {
+                Console.CursorLeft = 42;
+                Console.WriteLine($"{row} ");
+            }
+
+            Row();
+
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.Gray;
+
             Console.WriteLine();
             Display(bot1, colors.One);
             Console.Write(" - ");
@@ -189,11 +205,18 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
 
                 Console.Write($" {bot}");
             }
+
+            static void Row()
+            {
+                Console.Write("  ");
+                for (var col = 'a'; col <= 't'; col++) Console.Write($" {col}");
+                Console.WriteLine("  ");
+            }
         }
 
         public static void Move(Move move, Board board, Colors colors, ConsoleBot bot1, ConsoleBot bot2)
         {
-            Console.CursorLeft = move.Point.Col * 2 + 1;
+            Console.CursorLeft = move.Point.Col * 2 + 2;
             Console.CursorTop = move.Point.Row + 1;
 
             Console.ForegroundColor = ConsoleColor.Black;
@@ -235,11 +258,9 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.BackgroundColor = ConsoleColor.Black;
 
-
             Console.CursorLeft = 0;
-            Console.CursorTop = 19;
+            Console.CursorTop = 20;
 
-            
             var score = Scores.Get(board.ToArray());
 
             Console.BackgroundColor = Color(colors.One);
@@ -254,13 +275,13 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
             Console.CursorLeft = DisplayName(bot1.Bot).Length + 6;
             Console.BackgroundColor = Color(colors.Two);
             Console.ForegroundColor = ConsoleColor.Black;
-            Console.Write($"{board.Dots(colors.Two),2}"); 
+            Console.Write($"{board.Dots(colors.Two),2}");
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
 
             Console.Write($" {bot2.Elapsed.TotalSeconds:00.00}s".Replace(',', '.'));
-            
+
             Console.CursorTop += 1;
             Console.CursorLeft = 0;
 
@@ -299,9 +320,7 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
             _ => ConsoleColor.Black,
         };
     }
-
-
     private static StreamWriter GameLogger() => AppConfig.LogDirectory is { } dir
-            ? new StreamWriter(Path.Combine(dir.FullName, "_games", $"{Uuid.NewSequential()}.log"))
-            : new StreamWriter(new MemoryStream());
+        ? new StreamWriter(Path.Combine(dir.FullName, "_games", $"{Uuid.NewSequential()}.log"))
+        : new StreamWriter(new MemoryStream());
 }
