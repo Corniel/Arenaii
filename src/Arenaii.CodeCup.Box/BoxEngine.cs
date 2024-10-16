@@ -298,7 +298,26 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
 
             Console.ForegroundColor = ConsoleColor.White;
 
-            Console.Write(" PT");
+            Console.WriteLine(" PT");
+
+
+            var remaining = Colors.All.Except([colors.One, colors.Two])
+                .Select(c => KeyValuePair.Create(c, score[c]))
+                .Where(kvp => kvp.Value > 0)
+                .OrderByDescending(kvp => kvp.Value)
+                .ToArray();
+
+            if (remaining.Any())
+            {
+                Console.WriteLine("----");
+            }
+            foreach (var other in remaining)
+            {
+                Console.ForegroundColor = Color(other.Key);
+                Console.Write($"{other.Value,2}");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(" PT");
+            }
 
             static void Pixel(Move move, int i)
             {

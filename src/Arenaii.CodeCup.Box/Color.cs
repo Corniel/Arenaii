@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Arenaii.CodeCup.Box;
 
 public enum Color
@@ -11,4 +13,7 @@ public enum Color
     Purple = 6,
 }
 
-public readonly record struct Colors(Color One, Color Two);
+public readonly record struct Colors(Color One, Color Two)
+{
+    public static readonly IReadOnlyList<Color> All = [Color.Red, Color.Yellow, Color.Green, Color.Cyan, Color.Blue, Color.Purple];
+}

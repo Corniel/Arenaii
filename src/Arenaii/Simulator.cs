@@ -13,7 +13,7 @@ public abstract class Simulator<TCompetition, TSettings>
 
     public IEngine<TCompetition, TSettings> Engine { get; protected set; }
 
-    public TCompetition Competition { get; protected set; }
+    public TCompetition Competition { get; }
 
     public virtual void Run(string[] args)
     {
@@ -70,6 +70,7 @@ public abstract class Simulator<TCompetition, TSettings>
 
         return queue;
     }
+
     private Queue<Pairing> CreatePairingsByFrequency()
     {
         var queue = new Queue<Pairing>();
