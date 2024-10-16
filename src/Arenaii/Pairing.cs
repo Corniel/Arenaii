@@ -2,14 +2,11 @@ using Arenaii.Data;
 
 namespace Arenaii;
 
-	public class Pairing
-	{
-		public Pairing(Bot bot1, Bot bot2)
-		{
-			Bot1 = bot1;
-			Bot2 = bot2;
-		}
+public sealed class Pairing(Bot bot1, Bot bot2)
+{
+    public Bot Bot1 { get; } = bot1;
 
-		public Bot Bot1 { get; set; }
-		public Bot Bot2 { get; set; }
-	}
+    public Bot Bot2 { get; } = bot2;
+
+    public override string ToString() => $"{Bot1.FullName} - {Bot2.FullName}";
+}

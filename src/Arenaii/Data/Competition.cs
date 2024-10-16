@@ -14,7 +14,7 @@ public abstract class Competition<T> where T : Settings
         Settings = Activator.CreateInstance<T>();
     }
 
-    public T Settings { get; }
+    public T Settings { get; init; }
 
     public Bots Bots { get; }
 

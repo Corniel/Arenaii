@@ -18,25 +18,20 @@ public sealed class Bots : List<Bot>
 
         foreach (var dir in directory.EnumerateDirectories())
         {
-            var bot = Bot.Create(dir);
-            if (bot == null) { continue; }
-
-            if (Find(b => b.Id == bot.Id) is { } existing)
+            if (Bot.Create(dir) is { } bot)
             {
-                existing.IsActive = true;
-                existing.Location = bot.Location;
-                existing.Version ??= bot.Version;
-            }
-            else
-            {
-                bot.IsActive = true;
-                Add(bot);
+                if (Find(b => b.Id == bot.Id) is { } existing)
+                {
+                    existing.IsActive = true;
+                    existing.Location = bot.Location;
+                    existing.Version ??= bot.Version;
+                }
+                else
+                {
+                    bot.IsActive = true;
+                    Add(bot);
+                }
             }
         }
-    }
-
-    public Bot Get(string id)
-    {
-        return this.FirstOrDefault(bot => bot.Id == id);
     }
 }

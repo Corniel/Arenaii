@@ -58,6 +58,19 @@ public class Bot : IComparable<Bot>
     [XmlIgnore]
     public FileInfo? Location { get; set; }
 
+    public bool Exists()
+    {
+        if (Location is not { Exists: true })
+        {
+            IsActive = false;
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     public int CompareTo(Bot? other)
     {
         if(other is null) return +1;
