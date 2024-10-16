@@ -9,18 +9,18 @@ public abstract class Competition<T> where T : Settings
 {
     protected Competition()
     {
-        Bots = new Bots();
-        Matches = new List<Match>();
+        Bots = [];
+        Matches = [];
         Settings = Activator.CreateInstance<T>();
     }
 
-    public T Settings { get; set; }
+    public T Settings { get; }
 
-    public Bots Bots { get; protected set; }
+    public Bots Bots { get; }
 
-    public IEnumerable<Bot> RankingBots { get { return Bots.Where(b => b.IsActive || b.IsReference); } }
+    public IEnumerable<Bot> RankingBots => Bots.Where(b => b.IsActive || b.IsReference); 
 
-    public List<Match> Matches { get; protected set; }
+    public List<Match> Matches { get; }
 
     public void Remove(Bot bot)
     {
@@ -36,7 +36,7 @@ public abstract class Competition<T> where T : Settings
         for (var index = Matches.Count - 1; index >= 0; index--)
         {
             var match = Matches[index];
-            if (ids.Contains(match.Id1) && ids.Contains(match.Id2))
+            if (ids.Contains(match.Id1) && ids.Contains(match.Id2) && match.Id1 != match.Id2)
             {
                 continue;
             }
@@ -209,9 +209,8 @@ public abstract class Competition<T> where T : Settings
     }
 
     public static TCompetition Load<TCompetition>() where TCompetition : Competition<T>
-    {
-        return Load<TCompetition>(AppConfig.CompetitionDirectory);
-    }
+        => Load<TCompetition>(AppConfig.CompetitionDirectory);
+
     public static TCompetition Load<TCompetition>(DirectoryInfo directory) where TCompetition : Competition<T>
     {
         Guard.NotNull(directory, "directory");
@@ -225,7 +224,7 @@ public abstract class Competition<T> where T : Settings
         }
         using var stream = file.OpenRead();
         var serializer = new XmlSerializer(typeof(TCompetition));
-        var data = (TCompetition)serializer.Deserialize(stream);
+        var data = (TCompetition)serializer.Deserialize(stream)!;
         data.RemoveUnlinkedMatches();
         return data;
     }
