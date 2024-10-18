@@ -53,10 +53,6 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
         while (MouveCount(board) is { } count && count != 0)
         {
             turn++;
-            competition.Turns[turn]++;
-            competition.Options[turn] += count;
-            competition.Min[turn] = Math.Min(competition.Min[turn], count);
-            competition.Max[turn] = Math.Max(competition.Max[turn], count);
 
             var tile = Rnd.NextTile();
 
@@ -87,8 +83,6 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
             bot = bot == bot1 ? bot2 : bot1;
         }
 
-        competition.Turns[turn + 1]++;
-
         bot1.Write(Move.Quit.ToString());
         bot2.Write(Move.Quit.ToString());
 
@@ -97,20 +91,31 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
         var sco1 = scores[colors.One];
         var sco2 = scores[colors.Two];
 
-        var score = 0.5f;
-        if (sco1 > sco2) { score = 1; }
-        if (sco2 > sco1) { score = 0; }
-
         gamelog.WriteLine("Quit");
         gamelog.WriteLine($"{sco1} - {sco2}");
         gamelog.Flush();
 
-        return new Match(pairing.Bot1, pairing.Bot2, score)
+        return new Match(pairing.Bot1, pairing.Bot2, Score(sco1, sco2))
         {
             Duration1 = bot1.Elapsed,
             Duration2 = bot2.Elapsed,
         };
     }
+    public static float Score(int one, int two)
+    {
+        if (one == two) return 0.5f;
+
+        if (one > two)
+        {
+            return Math.Min(1f, (200 + one - two) / 300f);
+        }
+        else
+        {
+            return Math.Max(0f, (100 + one - two) / 300f);
+        }
+    }
+
+
 
     [Pure]
     private static int MouveCount(Board board)

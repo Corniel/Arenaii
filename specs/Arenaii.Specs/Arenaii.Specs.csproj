@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup Label="Analyzers">
-    <PackageReference Include="FluentAssertions.Analyzers"  PrivateAssets="all" />
+    <PackageReference Include="FluentAssertions.Analyzers" PrivateAssets="all" />
     <PackageReference Include="NUnit.Analyzers" PrivateAssets="all" />
   </ItemGroup>
 
@@ -32,6 +32,7 @@
     <ProjectReference Include="../../src/Arenaii.AIGames.UltimateTicTacToe/Arenaii.AIGames.UltimateTicTacToe.csproj" />
     <ProjectReference Include="../../src/Arenaii.Backgammon/Arenaii.Backgammon.csproj" />
     <ProjectReference Include="../../src/Arenaii.RiddlesIo.Golad/Arenaii.RiddlesIo.Golad.csproj" />
+    <ProjectReference Include="..\..\src\Arenaii.CodeCup.Box\Arenaii.CodeCup.Box.csproj" />
   </ItemGroup>
 
 </Project>
