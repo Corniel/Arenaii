@@ -69,25 +69,26 @@ public abstract class Competition<T> where T : Settings
 
                 foreach (var match in matches)
                 {
-                    var sc = (int)Math.Round(match.Score * 2);
+                    var sc = match.Score;
 
                     // mirrored.
                     if (match.Id1 != bot1.Id)
                     {
-                        sc = 2 - sc;
+                        sc = 1 - sc;
                     }
-                    if (sc == 2)
-                    {
-                        result.Wins++;
-                    }
-                    else if (sc == 1)
+                    if((int)(sc * 20) == 10)
                     {
                         result.Draws++;
+                    }
+                    else if (sc > 0.5)
+                    {
+                        result.Wins++;
                     }
                     else
                     {
                         result.Loses++;
                     }
+                    result.Scores += sc;
                 }
                 yield return result;
             }
@@ -106,21 +107,21 @@ public abstract class Competition<T> where T : Settings
                     Bot2 = bot2,
                 };
 
-                foreach (var match in matches)
+                foreach (var sc in matches.Select(m => m.Score))
                 {
-                    var sc = (int)Math.Round(match.Score * 2);
-                    if (sc == 2)
-                    {
-                        result.Wins++;
-                    }
-                    else if (sc == 1)
+                    if ((int)(sc * 20) == 10)
                     {
                         result.Draws++;
+                    }
+                    else if (sc > 0.5)
+                    {
+                        result.Wins++;
                     }
                     else
                     {
                         result.Loses++;
                     }
+                    result.Scores += sc;
                 }
                 yield return result;
             }

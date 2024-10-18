@@ -13,8 +13,9 @@ public class WeightedResult
     public int Draws { get; set; }
     public int Loses { get; set; }
     public int Count => Wins + Draws + Loses;
+    public double Scores { get; set; }
 
-    public Percentage Score => Count == 0 ? 50.Percent() : Percentage.Create((Wins + 0.5 * Draws) / Count);
+    public Percentage Score => Count == 0 ? 50.Percent() : Percentage.Create(Scores / Count);
 
     public override string ToString()
     {
@@ -36,6 +37,7 @@ public class WeightedResult
             result.Wins += res.Wins;
             result.Draws += res.Draws;
             result.Loses += res.Loses;
+            result.Scores += res.Scores;
         }
         return result;
     }
