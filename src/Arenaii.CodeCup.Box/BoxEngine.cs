@@ -4,6 +4,7 @@ using Arenaii.Platform;
 using Qowaiv;
 using System.Collections.Generic;
 using System.IO;
+using static System.FormattableString;
 
 namespace Arenaii.CodeCup.Box;
 
@@ -161,7 +162,7 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
                 Console.Write($"{pos,2}. ");
                 Console.Write(names[pos - 1]);
                 Console.CursorLeft = 42 + 10 + max;
-                Console.Write($"{bot.Elo,4:0}");
+                Console.Write(Invariant($"{bot.Elo,4:0.0}"));
                 pos++;
             }
         }

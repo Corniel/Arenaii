@@ -21,7 +21,7 @@ public class WeightedResult
     {
         if (Bot1 != null && Bot2 != null)
         {
-            return FormattableString.Invariant($"{Wins,4}+ {Draws,4}= {Loses,4}- {Count,4}# {Score.ToString("0.00%"),7} ({Bot1.FullName}-{Bot2.FullName})");
+            return FormattableString.Invariant($"{Wins,4}+ {Draws,4}= {Loses,4}- {Count,4}# {Score.ToString("0.00%"),7}  {Bot1.FullName,-25} - {Bot2.FullName}");
         }
         else
         {
