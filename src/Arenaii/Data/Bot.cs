@@ -60,6 +60,7 @@ public class Bot : IComparable<Bot>
 
     public bool Exists()
     {
+        Location?.Refresh();
         if (Location is not { Exists: true })
         {
             IsActive = false;
