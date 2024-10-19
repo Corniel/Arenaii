@@ -160,9 +160,13 @@ public abstract class Competition<T> where T : Settings
 
     public void WriteResults()
     {
-        var pos = 1;
-
         using var writer = new StreamWriter(new FileStream(AppConfig.ResultsFile.FullName, FileMode.Create, FileAccess.Write));
+        WriteResults(writer);
+    }
+
+    public void WriteResults(TextWriter writer)
+    {
+        var pos = 1;
         foreach (var bot in Bots)
         {
             writer.WriteLine("{0,4}  {1,4}  {2} ({3})", pos++, bot.Rating.ToString("0"), bot.FullName, Matches.Count(m => m.Id1 == bot.Id || m.Id2 == bot.Id));
@@ -218,6 +222,12 @@ public abstract class Competition<T> where T : Settings
         if (!directory.Exists) { directory.Create(); }
 
         var file = new FileInfo(Path.Combine(directory.FullName, typeof(TCompetition).Name + ".xml"));
+        return Load<TCompetition>(file);
+    }
+
+    public static TCompetition Load<TCompetition>(FileInfo file) where TCompetition : Competition<T>
+    {
+        Guard.NotNull(file, "file");
 
         if (!file.Exists)
         {
