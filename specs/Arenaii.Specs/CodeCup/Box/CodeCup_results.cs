@@ -11,7 +11,7 @@ internal class Standings
     {
         var competition = BoxCompetition.Load<BoxCompetition>(new FileInfo("../../../CodeCup/Box/Results/Round2.xml"));
 
-        foreach(var bot in competition.Bots)
+        foreach (var bot in competition.Bots)
         {
             bot.IsActive = true;
         }
@@ -33,5 +33,38 @@ internal class Standings
         Console.WriteLine("[/table]");
 
         competition.Bots.Should().HaveCount(38);
+    }
+
+    [Test]
+    public void Win_only_ranking()
+    {
+        var competition = BoxCompetition.Load<BoxCompetition>(new DirectoryInfo("../../../../../competitions/box"));
+        foreach (var bot in competition.Bots)
+        {
+            bot.IsActive = true;
+        }
+        foreach(var match in competition.Matches)
+        {
+            if(match.Score > 0.5)
+            {
+                match.Score = 1;
+            }
+            if(match.Score < 0.5)
+            {
+                match.Score = 0;
+            }
+        }
+
+        for (var i = 0; i < 100; i++)
+        {
+            competition.RecalculateElo();
+        }
+
+        var pos = 1;
+
+        foreach(var bot in competition.Bots)
+        {
+            Console.WriteLine($"{pos++,2} {bot.Elo,6:0.0} {bot.FullName}");
+        }
     }
 }

@@ -23,7 +23,7 @@ public sealed class Match
     public string Id2 { get; init; }
 
     [XmlAttribute("s")]
-    public float Score { get; init; }
+    public float Score { get; set; }
 
     [XmlAttribute("d1")]
     public int MilliSeconds1
