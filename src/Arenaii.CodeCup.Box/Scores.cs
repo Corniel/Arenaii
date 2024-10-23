@@ -80,76 +80,6 @@ public readonly struct Scores
         return score;
     }
 
-    public static Scores Get(ushort[] columns, Point pt, Color color)
-    {
-        var scores = None;
-
-        var col_idx = Board.Idx(color, pt.Col);
-        var column = columns[col_idx];
-
-        var w = pt.Col;
-        var n = pt.Row;
-        var e = Column.Count - pt.Col - 1;
-        var s = Row.Count - pt.Row - 1;
-
-        var nw = Math.Min(n, w);
-        var ne = Math.Min(n, e);
-        var se = Math.Min(s, e);
-        var sw = Math.Min(s, w);
-
-        // NW
-        for (byte score = 1; score <= nw; score++)
-        {
-            var row = pt.Row - score;
-            var mask = (ushort)Masks[score][row];
-            var other = columns[col_idx - score];
-
-            if ((mask & column & other) == mask)
-            {
-                scores = scores.Add(score, color);
-            }
-        }
-
-        // NE
-        for (byte score = 1; score <= ne; score++)
-        {
-            var row = pt.Row - score;
-            var mask = (ushort)Masks[score][row];
-            var other = columns[col_idx + score];
-
-            if ((mask & column & other) == mask)
-            {
-                scores = scores.Add(score, color);
-            }
-        }
-
-        // SE
-        for (byte score = 1; score <= se; score++)
-        {
-            var mask = (ushort)Masks[score][pt.Row];
-            var other = columns[col_idx + score];
-
-            if ((mask & column & other) == mask)
-            {
-                scores = scores.Add(score, color);
-            }
-        }
-
-        // SW
-        for (byte sc = 1; sc <= sw; sc++)
-        {
-            var mask = (ushort)Masks[sc][pt.Row];
-            var other = columns[col_idx - sc];
-
-            if ((mask & column & other) == mask)
-            {
-                scores = scores.Add(sc, color);
-            }
-        }
-
-        return scores;
-    }
-
     [Pure]
     private static Color GetColor(ushort[] columns, ushort row_mask, int col)
     {
@@ -168,40 +98,6 @@ public readonly struct Scores
         }
 
         return Color.Purple;
-    }
-
-    public static readonly Column[][] Masks = new Column[][]
-    {
-        Array.Empty<Column>(),
-        Init(01),
-        Init(02),
-        Init(03),
-        Init(04),
-        Init(05),
-        Init(06),
-        Init(07),
-        Init(08),
-        Init(09),
-        Init(10),
-        Init(11),
-        Init(12),
-        Init(13),
-        Init(14),
-        Init(15),
-    };
-
-    private static Column[] Init(int points)
-    {
-        var column = 1 | (1 << points);
-
-        var columns = new Column[Row.Count - points];
-
-        for (var i = 0; i < columns.Length; i++)
-        {
-            columns[i] = new Column((ushort)column);
-            column <<= 1;
-        }
-        return columns;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
