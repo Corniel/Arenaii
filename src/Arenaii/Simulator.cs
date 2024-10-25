@@ -61,10 +61,13 @@ public abstract class Simulator<TCompetition, TSettings>
 
         for (var i = 1; i < sorted.Length; i += 2)
         {
-            queue.Enqueue(new Pairing(sorted[i - 1], sorted[i]));
+            var pairing = new Pairing(sorted[i - 1], sorted[i]);
+            if (pairing.IsForbidden) continue;
+
+            queue.Enqueue(pairing);
             if (!Competition.Settings.IsSymetric)
             {
-                queue.Enqueue(new Pairing(sorted[i], sorted[i - 1]));
+                queue.Enqueue(pairing.Mirrored);
             }
         }
 
@@ -88,7 +91,9 @@ public abstract class Simulator<TCompetition, TSettings>
         foreach (var res in results)
         {
             if (res.Count != freq) { break; }
-            queue.Enqueue(new Pairing(res.Bot1, res.Bot2));
+            var pairing = new Pairing(res.Bot1, res.Bot2);
+            if (pairing.IsForbidden) continue;
+            queue.Enqueue(pairing);
         }
         return queue;
     }
