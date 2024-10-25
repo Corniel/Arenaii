@@ -18,7 +18,7 @@ public abstract class Competition<T> where T : Settings
 
     public Bots Bots { get; }
 
-    public IEnumerable<Bot> RankingBots => Bots.Where(b => b.IsActive || b.IsReference); 
+    public IEnumerable<Bot> RankingBots => Bots.Where(b => b.IsActive); 
 
     public List<Match> Matches { get; }
 

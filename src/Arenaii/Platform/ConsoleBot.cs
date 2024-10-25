@@ -88,9 +88,9 @@ public sealed class ConsoleBot : IDisposable
     }
 
     /// <summary>The process required to run the bot.</summary>
-    protected Process process;
+    private Process process;
 
-    protected Process CreateProcess(FileInfo exe)
+    private Process CreateProcess(FileInfo exe)
     {
         var p = new Process();
         p.StartInfo.WorkingDirectory = exe.Directory!.FullName;
@@ -130,9 +130,9 @@ public sealed class ConsoleBot : IDisposable
     }
 
     /// <summary>Dispose the console platform.</summary>
-    protected void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
-        if (!m_IsDisposed)
+        if (!IsDisposed)
         {
             if (disposing && process != null)
             {
@@ -142,14 +142,14 @@ public sealed class ConsoleBot : IDisposable
             {
                 Writer.Dispose();
             }
-            m_IsDisposed = true;
+            IsDisposed = true;
         }
     }
 
     /// <summary>Destructor</summary>
     ~ConsoleBot() { Dispose(false); }
 
-    private bool m_IsDisposed;
+    private bool IsDisposed;
 
     #endregion
 }
