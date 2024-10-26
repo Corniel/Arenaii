@@ -90,10 +90,18 @@ public abstract class Simulator<TCompetition, TSettings>
 
         foreach (var res in results)
         {
-            if (res.Count != freq) { break; }
+            if (queue.Any() && res.Count != freq)
+            {
+                break; 
+            }
             var pairing = new Pairing(res.Bot1, res.Bot2);
             if (pairing.IsForbidden) continue;
+            if(!queue.Any())
+            {
+                freq = res.Count;
+            }
             queue.Enqueue(pairing);
+
         }
         return queue;
     }

@@ -16,8 +16,11 @@ public sealed class Pairing(Bot bot1, Bot bot2)
     {
         get
         {
-            if (Bot1.Name != Bot2.Name) return false;
-            if (Bot1.Version is { Length: > 0 } v1 &&
+            if (Bot1.Name != Bot2.Name)
+            {
+                return false;
+            }
+            else if (Bot1.Version is { Length: > 0 } v1 &&
                 Bot2.Version is { Length: > 0 } v2)
             {
                 var v1s = v1.Split('.');
@@ -28,7 +31,7 @@ public sealed class Pairing(Bot bot1, Bot bot2)
                     && v1s[0] == v2s[0]
                     && v2s[1] == v1s[1];
             }
-            return false;
+            else return false;
         }
     }
 
