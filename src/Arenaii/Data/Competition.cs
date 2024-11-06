@@ -132,7 +132,11 @@ public abstract class Competition<T> where T : Settings
     {
         var results = GetWeightedResults().ToList();
 
-        for (var k = 128.0; k >= 0.48; k /= 2)
+        var max = results.Max(r => r.Count);
+        var upper = 128.0 / max;
+        var lower = 0.42 / max; 
+
+        for (var k = upper; k >= lower; k *= 0.73)
         {
             foreach (var result in results.Where(r => r.Count > 0))
             {
@@ -141,8 +145,7 @@ public abstract class Competition<T> where T : Settings
                 var z = Elo.GetZScore(bot1.Rating, bot2.Rating);
 
                 var delta = (double)result.Score - z;
-                // Over 10 games does not give any extra weight.
-                var f = Math.Min(result.Count, 10) / 10d;
+                var f = result.Count;
 
                 bot1.Rating += delta * k * f;
                 bot2.Rating -= delta * k * f;

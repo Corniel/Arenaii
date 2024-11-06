@@ -20,6 +20,8 @@ public sealed class BoxEngine : IEngine<BoxCompetition, BoxSettings>
         var timeMax = settings.TimeLimit;
         var colors = Rnd.NextColors();
 
+        colors = new Colors(settings.Color1 ?? colors.One, settings.Color2 ?? colors.Two);
+
         gamelog.WriteLine($"{(int)colors.One}: {pairing.Bot1.FullName}");
         gamelog.WriteLine($"{(int)colors.Two}: {pairing.Bot2.FullName}");
 

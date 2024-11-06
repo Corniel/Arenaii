@@ -6,4 +6,8 @@ public sealed class BoxSettings : Settings
     public int Time { get; init; } = 30_000;
 
     public TimeSpan TimeLimit => TimeSpan.FromMilliseconds(Time);
+
+    public Color? Color1 { get; init; }
+
+    public Color? Color2 { get; init; }
 }
