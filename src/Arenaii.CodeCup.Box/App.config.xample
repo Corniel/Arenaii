@@ -1,0 +1,6 @@
+<configuration>
+  <appSettings>
+    <add key="Competition.Dir" value="~\Arenaii\competitions\Box"/>
+    <add key="Log.Dir" value="~\Arenaii\competitions\Box\log"/>
+  </appSettings>
+</configuration>

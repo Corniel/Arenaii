@@ -1,0 +1,21 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="LICENSE.md" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="specs/Arenaii.Specs/Arenaii.Specs.csproj" />
+  </Folder>
+  <Project Path="src/Arenaii.AIGames.LightRiders/Arenaii.AIGames.LightRiders.csproj" />
+  <Project Path="src/Arenaii.AIGames.UltimateTicTacToe/Arenaii.AIGames.UltimateTicTacToe.csproj" />
+  <Project Path="src/Arenaii.AIGames/Arenaii.AIGames.csproj" />
+  <Project Path="src/Arenaii.Backgammon/Arenaii.Backgammon.csproj" />
+  <Project Path="src/Arenaii.CodeCup.Box/Arenaii.CodeCup.Box.csproj" />
+  <Project Path="src/Arenaii.RiddlesIo.Golad/Arenaii.RiddlesIo.Golad.csproj" />
+  <Project Path="src/Arenaii/Arenaii.csproj" />
+</Solution>

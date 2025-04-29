@@ -20,7 +20,7 @@ namespace Arenaii.Configuration;
 			}
 		}
 
-		public static DirectoryInfo LogDirectory
+		public static DirectoryInfo? LogDirectory
 		{
 			get
 			{

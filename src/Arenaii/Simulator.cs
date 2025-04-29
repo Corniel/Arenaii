@@ -3,39 +3,48 @@ using Arenaii.Data;
 namespace Arenaii;
 
 public abstract class Simulator<TCompetition, TSettings>
-		where TCompetition : Competition<TSettings>
-		where TSettings : Settings
-	{
-		protected Simulator()
-		{
-			Competition = Competition<TSettings>.Load<TCompetition>();
-		}
+        where TCompetition : Competition<TSettings>
+        where TSettings : Settings
+{
+    protected Simulator()
+    {
+        Competition = Competition<TSettings>.Load<TCompetition>();
+    }
 
-		public IEngine<TCompetition, TSettings> Engine { get; protected set; }
+    public IEngine<TCompetition, TSettings> Engine { get; protected set; }
 
-		public TCompetition Competition { get; protected set; }
+    public TCompetition Competition { get; }
 
-		public virtual void Run(string[] args)
-		{
-			while (true)
-			{
-				Competition.Bots.Activate();
-				var queue = CreatePairings();
-				if (queue.Count == 0) { return; }
-				while (queue.Count > 0)
-				{
-					var pairing = queue.Dequeue();
-					var outcome = Engine.Simulate(pairing, Competition);
-					Competition.Matches.Add(outcome);
+    public virtual void Run(string[] args)
+    {
+        while (true)
+        {
+            Competition.Bots.Activate();
+            
+            var queue = CreatePairings();
+            if (queue.Count == 0) { return; }
+            
+            while (queue.Count > 0)
+            {
+                var pairing = queue.Dequeue();
 
-					Competition.RecalculateElo();
-					Competition.Save();
-					Competition.WriteResults();
-				}
-			}
-		}
+                if(!pairing.Bot1.Exists() || !pairing.Bot2.Exists())
+                {
+                    queue.Clear();
+                    break;
+                }
 
-    private Queue<Pairing> CreatePairings() 
+                var outcome = Engine.Simulate(pairing, Competition);
+                Competition.Matches.Add(outcome);
+
+                Competition.RecalculateElo();
+                Competition.Save();
+                Competition.WriteResults();
+            }
+        }
+    }
+
+    private Queue<Pairing> CreatePairings()
         => Competition.Settings.Pairing switch
         {
             PairingType.Frequency => CreatePairingsByFrequency(),
@@ -43,39 +52,57 @@ public abstract class Simulator<TCompetition, TSettings>
         };
 
     private Queue<Pairing> CreateRandomPairings()
-		{
-			var queue = new Queue<Pairing>();
-			var sorted = Competition.Bots
-				.Where(bot => bot.Active)
-				.OrderBy(bot => Engine.Rnd.Next())
-				.ToArray();
+    {
+        var queue = new Queue<Pairing>();
+        var sorted = Competition.Bots
+            .Where(bot => bot.IsActive)
+            .OrderBy(bot => Engine.Rnd.Next())
+            .ToArray();
 
-			for (var i = 1; i < sorted.Length; i += 2)
-			{
-				queue.Enqueue(new Pairing(sorted[i - 1], sorted[i]));
-				if (!Competition.Settings.IsSymetric)
-				{
-					queue.Enqueue(new Pairing(sorted[i], sorted[i - 1]));
-				}
-			}
+        for (var i = 1; i < sorted.Length; i += 2)
+        {
+            var pairing = new Pairing(sorted[i - 1], sorted[i]);
+            if (pairing.IsForbidden) continue;
 
-			return queue;
-		}
-		private Queue<Pairing> CreatePairingsByFrequency()
-		{
-			var queue = new Queue<Pairing>();
+            queue.Enqueue(pairing);
+            if (!Competition.Settings.IsSymetric)
+            {
+                queue.Enqueue(pairing.Mirrored);
+            }
+        }
 
-			var results = Competition.GetWeightedResults().OrderBy(res => res.Count).ToList();
+        return queue;
+    }
 
-			if (results.Count == 0) { return queue; }
+    private Queue<Pairing> CreatePairingsByFrequency()
+    {
+        var queue = new Queue<Pairing>();
 
-			var freq = results[0].Count;
+        var results = Competition
+            .GetWeightedResults()
+            .Where(r => r.Bot1.IsActive && r.Bot2.IsActive)
+            .OrderBy(res => res.Count)
+            .ToList();
 
-			foreach (var res in results)
-			{
-				if (res.Count != freq) { break; }
-				queue.Enqueue(new Pairing(res.Bot1, res.Bot2));
-			}
-			return queue;
-		}
-	}
+        if (results.Count == 0) { return queue; }
+
+        var freq = results[0].Count;
+
+        foreach (var res in results)
+        {
+            if (queue.Any() && res.Count != freq)
+            {
+                break; 
+            }
+            var pairing = new Pairing(res.Bot1, res.Bot2);
+            if (pairing.IsForbidden) continue;
+            if(!queue.Any())
+            {
+                freq = res.Count;
+            }
+            queue.Enqueue(pairing);
+
+        }
+        return queue;
+    }
+}
